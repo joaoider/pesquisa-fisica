@@ -242,7 +242,21 @@ Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (mét
 
 **Leitura:** a ponte fecha, mas só com uma peça específica. As partes de matéria (escalares mínimos e férmions) têm entropia de emaranhamento exatamente igual a A/(4G_ind). Os campos das forças não: o que fecha a conta são os **modos de borda dos campos de gauge** na superfície de emaranhamento, com contribuição negativa (−6 por vetor). Para a tese, isso significa que, se a gravidade emerge das 3 forças, a entropia de Bekenstein-Hawking não é só "contagem de estados de matéria": ela inclui os graus de liberdade de borda das forças. Esse é o mesmo sinal negativo dos vetores em G (H1) e o mesmo papel da estrutura de gauge que não gera geometria sozinha (código tórico, v0.4).
 
-**Pendente:** calcular o termo de contato −6 diretamente, com Maxwell na rede em espaço de Hilbert estendido, em vez de tomá-lo da literatura.
+**v0.12: o termo de contato agora é calculado, não citado.** No mesmo esquema da ponte (heat kernel + réplicas), calculei o espectro exato de uma **1-forma** no disco cônico. Ao dar a volta na ponta, o vetor gira de 2πα, então as componentes V_x ± iV_y carregam índice angular ν = m/α ± 1 (zeros de Bessel exatos para α = 1/n). Decompondo a constante do heat kernel em borda (∝ α) e ponta [(1/α − α) e (1 − α)]:
+
+| Quantidade (unidades de escalar) | Calculado |
+|---|---|
+| Escalar: coeficiente de holonomia q | 2×10⁻⁵ (≈ 0) |
+| 1-forma: coeficiente de holonomia q | **−0,99999** (termo −(1 − α) na ponta) |
+| 1-forma no plano do cone | −4,0000 (dois escalares dariam +2) |
+| Campo de gauge (2 transversas + 1-forma − 2 fantasmas) | **−4,0000** = peso do vetor em 1/G (H1) |
+| Contagem física (2 polarizações) | +2,0001 |
+| **Termo de contato** | **−6,0001** (Kabat) |
+| Modelo Padrão com pesos calculados: S/(A/4G) | **1,000** |
+
+**Parte universal, na rede e independente de esquema:** termos de área dependem do regulador, mas o termo logarítmico da esfera não. Para Maxwell, o resultado físico (sem modos de borda) difere do da anomalia por −1/3, que é a contribuição dos modos de borda: −2 × (coeficiente da onda parcial l = 0 de um escalar). Calculei esse coeficiente numa rede radial de Srednicki com 3000 sítios: **0,1646 a 0,1652 (1/6 com 1,3% de erro)**, o que dá −1/3 para os modos de borda.
+
+**Limite honesto:** a parte universal identifica a contribuição dos modos de borda pelo argumento de Casini-Huerta e Donnelly-Wall (Maxwell físico = 2 escalares sem l = 0); o que calculo é o bloco l = 0 e o termo de contato no esquema da ponte. Não implementei a teoria de Maxwell completa na rede cúbica com centro elétrico.
 
 ## Próximos passos
 
@@ -264,7 +278,8 @@ Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (mét
 - [x] H2: passo holográfico → Einstein linearizado (rede de tensores perfeitos + Klein-Gordon em dS₂ + reconstrução do bulk) (v0.10)
 - [ ] H2: Einstein linearizado em d ≥ 3 (CFT 2+1D, bulk 4D com grávitons) e redes tensoriais com laços (HaPPY completo/MERA)
 - [x] Ponte H1↔H2 (v0.11): fecha para matéria; para o MP inteiro só com os modos de borda dos campos de gauge
-- [ ] Termo de contato de Kabat calculado na rede (Maxwell com centro elétrico)
+- [x] Termo de contato de Kabat calculado pelo espectro exato no cone (holonomia) e bloco universal l = 0 na rede (v0.12)
+- [ ] Maxwell completo na rede cúbica 3D com centro elétrico (Casini-Huerta) para o termo log −16/45 vs −31/45
 - [ ] Weinberg-Witten: identificar formalmente qual hipótese é violada (T0)
 - [ ] Ação efetiva quadrática em h_ab: gráviton sem massa, 2 polarizações, c_g = c (T1/T2)
 - [ ] T3: coeficientes de R² e Weyl² fixados pelo Modelo Padrão (a_2) e desvios de Newton em curtas distâncias
@@ -294,6 +309,9 @@ Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (mét
 - D. Kabat, *Black hole entropy and entropy of entanglement*, Nucl. Phys. B 453, 281 (1995), arXiv:hep-th/9503016
 - W. Donnelly, A. C. Wall, *Entanglement entropy of electromagnetic edge modes*, PRL 114, 111603 (2015), arXiv:1412.1895
 - L. Susskind, J. Uglum, *Black hole entropy in canonical quantum gravity and superstring theory*, PRD 50, 2700 (1994), arXiv:hep-th/9401070
+- H. Casini, M. Huerta, *Entanglement entropy of a Maxwell field on the sphere*, PRD 93, 105031 (2016), arXiv:1512.06182
+- W. Donnelly, A. C. Wall, *Geometric entropy and edge modes of the electromagnetic field*, PRD 94, 104053 (2016), arXiv:1506.05792
+- M. Srednicki, *Entropy and area*, PRL 71, 666 (1993), arXiv:hep-th/9303048
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)

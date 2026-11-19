@@ -104,8 +104,45 @@ def test_ponte_fecha_com_modos_de_borda(xi, nu_R):
     assert t["razao"] == pytest.approx(1.0)
 
 
-@pytest.mark.skip(reason="Pendente: calcular o termo de contato (−6 por vetor) diretamente, via entropia de Maxwell na rede "
-                         "com centro elétrico / espaço de Hilbert estendido (Casini-Huerta; Donnelly-Wall), em vez de "
-                         "tomá-lo da literatura.")
-def test_termo_de_contato_de_kabat_calculado_na_rede():
-    ...
+# ---------------------------------------------------------------- P6 (v0.12): termo de contato calculado, não tomado da literatura
+
+@pytest.fixture(scope="module")
+def pesos_gauge():
+    from pesquisa_fisica.bridge import gauge_field_entropy_weights
+    return gauge_field_entropy_weights()
+
+
+def test_um_forma_sem_cone_vale_dois_escalares():
+    from pesquisa_fisica.bridge import cone_heat_trace, cone_one_form_heat_trace, fit_constant
+    assert fit_constant(cone_one_form_heat_trace, 1) == pytest.approx(2 * fit_constant(cone_heat_trace, 1), abs=1e-4)
+
+
+def test_holonomia_da_ponta_so_existe_para_vetores(pesos_gauge):
+    assert pesos_gauge["ajuste_escalar"]["q"] == pytest.approx(0.0, abs=1e-3)
+    assert pesos_gauge["q_holonomia"] == pytest.approx(-1.0, abs=1e-3)       # termo −(1 − α) na ponta
+
+
+def test_termo_de_contato_de_kabat_calculado_do_espectro(pesos_gauge):
+    assert pesos_gauge["contagem_fisica"] == pytest.approx(2.0, abs=1e-2)    # 2 polarizações
+    assert pesos_gauge["termo_de_contato"] == pytest.approx(-6.0, abs=1e-2)  # Kabat, agora calculado
+    assert pesos_gauge["campo_de_gauge"] == pytest.approx(g_weight("vetor"), abs=1e-2)   # = −4, o peso em 1/G (H1)
+
+
+def test_ponte_fecha_para_o_mp_com_pesos_calculados(pesos_gauge):
+    S = 4 * pesos_gauge["escalar"] + 45 * 1.0 + 12 * pesos_gauge["campo_de_gauge"]
+    G = 4 * g_weight("escalar") + 45 * g_weight("weyl") + 12 * g_weight("vetor")
+    assert S / G == pytest.approx(1.0, abs=2e-3)
+
+
+def test_parte_universal_onda_l0_tem_coeficiente_um_sexto():
+    """Na rede (independente de esquema): o termo logarítmico da esfera para Maxwell difere do da anomalia por −1/3,
+    a contribuição dos modos de borda = −2 × (coeficiente da onda parcial l = 0 de um escalar). Aqui calculamos
+    esse coeficiente numa rede radial de Srednicki: 1/6."""
+    from pesquisa_fisica.bridge import radial_chain_l
+    from pesquisa_fisica.emergence.entanglement import harmonic_entropy
+    X, P = radial_chain_l(3000, 0)
+    Rs = np.array([20, 40, 80, 120, 160, 200])
+    S = [harmonic_entropy(X, P, list(range(R))) for R in Rs]
+    coef = np.polyfit(np.log(Rs), S, 1)[0]
+    assert coef == pytest.approx(1 / 6, rel=0.03)
+    assert -2 * coef == pytest.approx(-1 / 3, rel=0.03)          # modos de borda do Maxwell no termo log
