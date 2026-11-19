@@ -80,6 +80,21 @@ def test_geometria_emergente_e_a_cadeia_local(estados, J):
 
 # ---------------------------------------------------------------- P4
 
+def test_conclusoes_valem_na_particao_fermionica(estados):
+    """Robustez: com a partição fermiônica correta (sinais de Jordan-Wigner), em vez da de qubits,
+    a cadeia continua sendo recuperada e a localidade continua crescendo com J."""
+    from pesquisa_fisica.emergence.su2_lattice import site_mutual_information as fermionic_mi
+    from pesquisa_fisica.emergence.schwinger import sector_basis
+    basis = sector_basis(N)
+    r = []
+    for J in ACOPLAMENTOS:
+        I = fermionic_mi(basis, estados[J][1][basis], N, modes_per_site=2)
+        A = knn_graph(I, 2, mutual=True)
+        assert (A & CADEIA).sum() == A.sum() == CADEIA.sum()
+        r.append(I[4, 5] / I[3, 6])
+    assert r[0] < r[1] < r[2]
+
+
 def test_acoplamento_de_gauge_mais_forte_deixa_o_emaranhamento_mais_local(estados):
     def razao(J):
         I = estados[J][2]

@@ -134,6 +134,23 @@ Observação: a meio preenchimento a informação mútua entre sítios da mesma 
 
 **Limitações:** U(1) dinâmico só em 1+1D; em 2D o fundo é estático (campo médio). QED₃ dinâmica exige DMRG/Monte Carlo.
 
+### v0.7 — SU(2) na rede em 1+1D (análogo não abeliano do Schwinger)
+
+Formulação de Bañuls et al. (PRX 2017): férmions staggered de 2 cores, links removidos por transformação de gauge, campo elétrico de cor dado pela carga acumulada; termo elétrico = Casimir S_n·S_n. Setor físico: meio preenchimento + singleto de cor. Diagonalização exata (Lanczos) com N = 8 (12 870 estados) e N = 10 (184 756 estados). Emaranhamento calculado com a **partição fermiônica** correta (sinais de Jordan-Wigner). Arquivo: `tests/h2/test_h2_t1_su2.py`.
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Solver correto | **Passou.** J = 0 = duas cópias de férmions livres (10⁻⁹); estado fundamental é singleto de cor (S² = 0) para todo J |
+| **P2.** Termo de cor não local e não abeliano | **Confirmado.** O Casimir troca a cor entre sítios distantes com a mesma amplitude a distância 2 e 5 |
+| **P3.** Geometria emergente é a cadeia local | **Passou.** Vizinhos recíprocos = cadeia exata para J = 0; 0,5; 2; 5 e em N = 10 |
+| **P4.** Confinamento de cor ⇒ emaranhamento mais local | **Passou.** Razão I(vizinhos)/I(distância 3): 9,7 → 16,7 → 54,5 → 296 |
+
+**Robustez do U(1):** refiz o Schwinger com a partição fermiônica. As conclusões se mantêm (cadeia exata; razão 73 → 354 → 9599), então não dependem da escolha de partição.
+
+**Leitura física:** a força não abeliana reproduz o padrão do eletromagnetismo. O Hamiltoniano acopla e troca cor entre sítios distantes, mas o emaranhamento escolhe a vizinhança local, e o **confinamento de cor aperta a geometria**. Com U(1) e SU(2) mostrando o mesmo comportamento, ele parece ser uma propriedade geral de teorias de gauge confinantes com matéria, não um acidente de um modelo.
+
+**Limitações:** 1+1D (a lei de Gauss elimina o campo exatamente; em 2+1D o campo de cor é dinâmico e o espaço de Hilbert cresce muito rápido); SU(2), não SU(3); redes curtas (até 10 sítios).
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -147,7 +164,9 @@ Observação: a meio preenchimento a informação mútua entre sítios da mesma 
 - [ ] H2: Z₂ com matéria bosônica (Fradkin-Shenker) em redes grandes via PEPS/DMRG, para comparar com a matéria fermiônica
 - [x] H2: U(1) com férmions: Schwinger dinâmico em 1+1D e fundo de fluxo em 2D (v0.6)
 - [ ] H2: QED₃ dinâmica (U(1) compacto em 2+1D) via DMRG em cilindro
-- [ ] H2: SU(2) e SU(3) na rede com férmions (força fraca e forte)
+- [x] H2: SU(2) em 1+1D com férmions (v0.7)
+- [ ] H2: SU(3) em 1+1D (QCD 1+1D, 3 cores: bárions de 3 quarks)
+- [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
 - [ ] H2: primeira lei do emaranhamento → Einstein linearizado (Faulkner et al. 2014)
@@ -174,6 +193,7 @@ Observação: a meio preenchimento a informação mútua entre sítios da mesma 
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)
 - E. A. Martinez et al., *Real-time dynamics of lattice gauge theories with a few-qubit quantum computer*, Nature 534, 516 (2016), arXiv:1605.04570
 - D. R. Hofstadter, Phys. Rev. B 14, 2239 (1976)
+- M. C. Bañuls, K. Cichy, J. I. Cirac, K. Jansen, S. Kühn, *Efficient basis formulation for (1+1)-dimensional SU(2) lattice gauge theory*, Phys. Rev. X 7, 041046 (2017), arXiv:1707.06434
 - A. Kitaev, *Anyons in an exactly solved model and beyond*, Ann. Phys. 321, 2 (2006), arXiv:cond-mat/0506438
 - H. Yao, X.-L. Qi, *Entanglement entropy and entanglement spectrum of the Kitaev model*, PRL 105, 080501 (2010), arXiv:1001.1165
 - S. Trebst, P. Werner, M. Troyer, K. Shtengel, C. Nayak, *Breakdown of a topological phase*, PRL 98, 070602 (2007), arXiv:cond-mat/0609048
