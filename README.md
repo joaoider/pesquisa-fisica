@@ -151,6 +151,29 @@ Formulação de Bañuls et al. (PRX 2017): férmions staggered de 2 cores, links
 
 **Limitações:** 1+1D (a lei de Gauss elimina o campo exatamente; em 2+1D o campo de cor é dinâmico e o espaço de Hilbert cresce muito rápido); SU(2), não SU(3); redes curtas (até 10 sítios).
 
+### v0.8 — SU(3) na rede em 1+1D (QCD 1+1D, 3 cores)
+
+Código geral SU(N_c) (`sun_lattice.py`), com o Casimir de cor pela identidade de Fierz: S·S = ½ Σ E^{cc'}E^{c'c} − N²/(2N_c). Arquivo: `tests/h2/test_h2_t1_su3.py` (N = 6, 48 620 estados). A versão grande, **N = 8 com 2 704 156 estados**, roda no GitHub Actions: workflow manual *Cálculo pesado*, `scripts/su3_n8.py`, resultado em `results/su3_n8.json`.
+
+| Predição | Resultado (N = 6) |
+|---|---|
+| **P1.** Solver correto | **Passou.** Código geral reproduz o SU(2) (10⁻¹⁴); J = 0 = 3 cópias de férmions livres; singleto de cor para todo J |
+| **P2.** Cadeia emergente para todo J | **Passou** |
+| **P3.** Confinamento de cor ⇒ mais local | **Passou.** Razão I(vizinhos)/I(distância 3): 53 → 73 → 212 → 2176 |
+
+**N = 8 no GitHub Actions (2 704 156 estados; runner público 4 vCPU / 15 GB; 38 min).** [Execução](https://github.com/joaoider/pesquisa-fisica/actions/runs/44568396438), resultados em `results/su3_n8.json`, conferidos por `tests/h2/test_h2_resultados_pesados.py`.
+
+| J | Energia | Singleto (S²) | Cadeia | Spearman | I(viz.)/I(d=3) |
+|---|---|---|---|---|---|
+| 0 | −15,849563 (= férmions livres) | 4×10⁻²² | ✔ | 0,903 | 9,7 |
+| 0,5 | −14,204158 | 5×10⁻²² | ✔ | 0,966 | 24,6 |
+| 2 | −11,121905 | 1×10⁻²² | ✔ | 0,966 | 169 |
+| 5 | −8,687099 | 9×10⁻²³ | ✔ | 0,966 | 2132 |
+
+Veredito: **P1, P2 e P3 confirmadas em N = 8.** Informação mútua média por distância (1…7): em J = 0 oscila (1,47; 0,098; **0,104**; 0,022; **0,028**; 0,005; **0,018**); em J = 0,5 decai (1,35; 0,13; 0,045; 0,012; 0,004; 0,001; 0,0007); em J = 5 cai a ~0 a partir da distância 3.
+
+**Achado novo:** sem a força (J = 0), a informação mútua a distância 3 **supera** a de distância 2 (0,135 × 0,099): as duas sub-redes de férmions livres se correlacionam entre si, e a ordem por distância se inverte (Spearman 0,77). Em N = 4 o efeito chega a ligar as pontas da cadeia. **Qualquer J > 0 restaura a ordem** (Spearman ≥ 0,91). Ou seja, a matéria sozinha não define uma métrica bem-comportada, e a força de cor é o que a organiza.
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -165,7 +188,7 @@ Formulação de Bañuls et al. (PRX 2017): férmions staggered de 2 cores, links
 - [x] H2: U(1) com férmions: Schwinger dinâmico em 1+1D e fundo de fluxo em 2D (v0.6)
 - [ ] H2: QED₃ dinâmica (U(1) compacto em 2+1D) via DMRG em cilindro
 - [x] H2: SU(2) em 1+1D com férmions (v0.7)
-- [ ] H2: SU(3) em 1+1D (QCD 1+1D, 3 cores: bárions de 3 quarks)
+- [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
