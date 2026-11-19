@@ -269,6 +269,30 @@ Vizinhança da tese: Szangolies (arXiv:2512.17328) é o trabalho conceitual mais
 
 O que pode ter valor original: (i) geometria emergente de **estados fundamentais de teorias de gauge com matéria**, com controles negativos sistemáticos (precisa de busca mais funda); (ii) o teste discriminante gap × confinamento; (iii) a síntese reprodutível H1 + H2 + ponte, que tem valor metodológico e não é descoberta.
 
+## Teste discriminante: gap × confinamento (v0.13)
+
+Arquivos: `src/pesquisa_fisica/emergence/discriminant.py`, `tests/h2/test_h2_t1_discriminante_gap_confinamento.py`. **Hipótese nula (literatura):** com o *mesmo gap*, a geometria emergente da informação mútua é a mesma, venha o gap da força de gauge ou de uma massa sem gauge.
+
+**U(1), Schwinger com massa de quark zero (todo o gap vem da força) × cadeia livre com massa ajustada para o mesmo gap** (N = 20, partição fermiônica). Razão I_gauge(d)/I_livre(d):
+
+| J | gap | d = 1 | d = 2 | d = 3 | d = 4 | d = 5 | d = 6 |
+|---|---|---|---|---|---|---|---|
+| 0,5 | 1,053 | 1,07 | 1,26 | 1,17 | 0,96 | 0,72 | 0,51 |
+| 1 | 1,591 | 1,13 | 1,17 | 0,89 | 0,58 | 0,35 | 0,20 |
+| 2 | 2,543 | 1,15 | 0,93 | 0,51 | 0,24 | 0,11 | 0,04 |
+
+**H0 rejeitada.** No mesmo gap, a força dá emaranhamento **mais local**: mais informação mútua entre vizinhos e decaimento mais rápido. O excesso cresce com o acoplamento. Taxa de decaimento ÷ gap: 1,34–1,40 com gauge contra 0,97–1,17 com massa livre.
+
+**Controle mais duro:** igualando o comprimento de correlação (a taxa de decaimento) em vez do gap, os perfis ainda diferem. A força dá 1,1–1,5× mais informação mútua em d = 1 e 2–3× em d ≥ 2. Não é "só ξ".
+
+**SU(2)** (quark com massa 0,5, N = 8, singleto de cor): mesmo padrão. A razão em d = 5 vai de 0,81 a 0,021 de J = 0,5 a J = 4. **E confinamento ≠ gap:** com quarks sem massa, o gap do SU(2) *diminui* com o acoplamento (méson leve, à la 't Hooft).
+
+**Mecanismo provável (bosonização):** na teoria confinada, as excitações com gap são **mésons** (compostos bosônicos). Na livre, o portador mais leve é um férmion com metade do gap do par. Como I ~ (correlação)², no contínuo o decaimento confinado deveria ser **2×** mais rápido no mesmo gap. Na rede finita vejo cerca de 1,4×.
+
+**Novidade (avaliação honesta):** o mecanismo é conhecido (bosonização; Florio, arXiv:2312.05298, sobre negatividade fermiônica × espectro bosônico no Schwinger). Não encontrei o teste de *gap pareado* para a geometria emergente, e o resultado contradiz, neste cenário de rede em 1+1D, a afirmação holográfica de que o emaranhamento não distingue confinamento de gap (arXiv:2010.09392, que trata de teorias holográficas de N grande, um regime diferente). Para a tese, a leitura é que **a força não é só uma fonte de gap: ela muda a natureza dos portadores de emaranhamento** (de férmions para mésons), e isso aperta a geometria.
+
+**Limites:** redes pequenas (10 células no U(1), 8 sítios no SU(2)); só 1+1D; taxas medidas a d ≤ 6. **Próximo:** cadeias longas (DMRG) para medir a razão assintótica das taxas e testar a predição de 2 do contínuo.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -282,7 +306,8 @@ O que pode ter valor original: (i) geometria emergente de **estados fundamentais
 - [ ] H2: QED₃ dinâmica (U(1) compacto em 2+1D) via DMRG em cilindro
 - [x] H2: SU(2) em 1+1D com férmions (v0.7)
 - [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
-- [ ] H2: teste discriminante — mesmo gap, com e sem gauge
+- [x] H2: teste discriminante — mesmo gap, com e sem gauge (v0.13): H0 rejeitada em U(1) e SU(2)
+- [ ] H2: razão assintótica das taxas (gauge/livre, mesmo gap) em cadeias longas via DMRG — predição do contínuo: 2
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
@@ -324,6 +349,7 @@ O que pode ter valor original: (i) geometria emergente de **estados fundamentais
 - H. Casini, M. Huerta, *Entanglement entropy of a Maxwell field on the sphere*, PRD 93, 105031 (2016), arXiv:1512.06182
 - W. Donnelly, A. C. Wall, *Geometric entropy and edge modes of the electromagnetic field*, PRD 94, 104053 (2016), arXiv:1506.05792
 - M. Srednicki, *Entropy and area*, PRL 71, 666 (1993), arXiv:hep-th/9303048
+- A. Florio, *Two-fermion negativity and confinement in the Schwinger model*, arXiv:2312.05298
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)
