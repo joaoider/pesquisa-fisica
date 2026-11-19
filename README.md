@@ -227,6 +227,23 @@ Arquivo: `tests/h2/test_h2_t1_holografia_einstein.py`. A cadeia lógica é: RT (
 
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
+## Ponte H1 ↔ H2 (v0.11): S = A/(4G) usa o mesmo G induzido?
+
+Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (método das réplicas, heat kernel no cone) e o G induzido de H1 foram calculados **no mesmo esquema** (corte de tempo próprio).
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Termo da ponta do cone (1/12)(1/α − α) | **Passou.** Espectro exato (zeros de Bessel) em cones α = 1/2, 1/3, 1/4: erro ~10⁻⁵ |
+| **P2.** Escalar mínimo: S/A = 1/(4G_ind) | **Passou, exatamente.** S/A = Λ²/48π = A/4G de H1 (10⁻⁸) |
+| **P3.** Férmions: mesmo peso | **Passou.** c(Dirac) = 1,027 ≈ c(escalar) = 0,985 em 1+1D na rede; com 2 componentes transversas, Weyl = 1 unidade de escalar, igual ao peso em 1/G |
+| **P4.** Escalar com ξ ≠ 0 | Diferença −6ξ (termo de Wald): o escalar conforme tem entropia mas **não induz G** |
+| **P4.** Vetores de gauge | **Não fecha só com o bulk.** Contagem de estados +2 por vetor; 1/G dá −4. Falta −6 por vetor = termo de contato de Kabat = **modos de borda** do campo de gauge (Donnelly-Wall) |
+| **P5.** Modelo Padrão inteiro | Sem modos de borda: **S_emaranhamento = 73 × A/(4G_ind)** (`xfail`). Com modos de borda: **razão = 1 exatamente** (com ou sem ν_R, ξ pequeno) |
+
+**Leitura:** a ponte fecha, mas só com uma peça específica. As partes de matéria (escalares mínimos e férmions) têm entropia de emaranhamento exatamente igual a A/(4G_ind). Os campos das forças não: o que fecha a conta são os **modos de borda dos campos de gauge** na superfície de emaranhamento, com contribuição negativa (−6 por vetor). Para a tese, isso significa que, se a gravidade emerge das 3 forças, a entropia de Bekenstein-Hawking não é só "contagem de estados de matéria": ela inclui os graus de liberdade de borda das forças. Esse é o mesmo sinal negativo dos vetores em G (H1) e o mesmo papel da estrutura de gauge que não gera geometria sozinha (código tórico, v0.4).
+
+**Pendente:** calcular o termo de contato −6 diretamente, com Maxwell na rede em espaço de Hilbert estendido, em vez de tomá-lo da literatura.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -246,7 +263,8 @@ Arquivo: `tests/h2/test_h2_t1_holografia_einstein.py`. A cadeia lógica é: RT (
 - [x] H2: Hamiltoniano de emaranhamento geométrico + primeira lei (v0.9)
 - [x] H2: passo holográfico → Einstein linearizado (rede de tensores perfeitos + Klein-Gordon em dS₂ + reconstrução do bulk) (v0.10)
 - [ ] H2: Einstein linearizado em d ≥ 3 (CFT 2+1D, bulk 4D com grávitons) e redes tensoriais com laços (HaPPY completo/MERA)
-- [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
+- [x] Ponte H1↔H2 (v0.11): fecha para matéria; para o MP inteiro só com os modos de borda dos campos de gauge
+- [ ] Termo de contato de Kabat calculado na rede (Maxwell com centro elétrico)
 - [ ] Weinberg-Witten: identificar formalmente qual hipótese é violada (T0)
 - [ ] Ação efetiva quadrática em h_ab: gráviton sem massa, 2 polarizações, c_g = c (T1/T2)
 - [ ] T3: coeficientes de R² e Weyl² fixados pelo Modelo Padrão (a_2) e desvios de Newton em curtas distâncias
@@ -273,6 +291,9 @@ Arquivo: `tests/h2/test_h2_t1_holografia_einstein.py`. A cadeia lógica é: RT (
 - F. Pastawski, B. Yoshida, D. Harlow, J. Preskill, *Holographic quantum error-correcting codes* (HaPPY), JHEP 06, 149 (2015), arXiv:1503.06237
 - J. de Boer, M. P. Heller, R. C. Myers, Y. Neiman, *Holographic de Sitter geometry from entanglement in CFTs*, PRL 116, 061602 (2016), arXiv:1509.00113
 - J. D. Brown, M. Henneaux, Commun. Math. Phys. 104, 207 (1986)
+- D. Kabat, *Black hole entropy and entropy of entanglement*, Nucl. Phys. B 453, 281 (1995), arXiv:hep-th/9503016
+- W. Donnelly, A. C. Wall, *Entanglement entropy of electromagnetic edge modes*, PRL 114, 111603 (2015), arXiv:1412.1895
+- L. Susskind, J. Uglum, *Black hole entropy in canonical quantum gravity and superstring theory*, PRD 50, 2700 (1994), arXiv:hep-th/9401070
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)
