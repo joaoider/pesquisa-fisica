@@ -172,7 +172,7 @@ Código geral SU(N_c) (`sun_lattice.py`), com o Casimir de cor pela identidade d
 
 Veredito: **P1, P2 e P3 confirmadas em N = 8.** Informação mútua média por distância (1…7): em J = 0 oscila (1,47; 0,098; **0,104**; 0,022; **0,028**; 0,005; **0,018**); em J = 0,5 decai (1,35; 0,13; 0,045; 0,012; 0,004; 0,001; 0,0007); em J = 5 cai a ~0 a partir da distância 3.
 
-**Achado novo:** sem a força (J = 0), a informação mútua a distância 3 **supera** a de distância 2 (0,135 × 0,099): as duas sub-redes de férmions livres se correlacionam entre si, e a ordem por distância se inverte (Spearman 0,77). Em N = 4 o efeito chega a ligar as pontas da cadeia. **Qualquer J > 0 restaura a ordem** (Spearman ≥ 0,91). Ou seja, a matéria sozinha não define uma métrica bem-comportada, e a força de cor é o que a organiza.
+**Achado (reclassificado em 19/11/2026 como reprodução, ver "Checagem de novidade"):** sem a força (J = 0), a informação mútua a distância 3 **supera** a de distância 2 (0,135 × 0,099): as duas sub-redes de férmions livres se correlacionam entre si, e a ordem por distância se inverte (Spearman 0,77). Em N = 4 o efeito chega a ligar as pontas da cadeia. **Qualquer J > 0 restaura a ordem** (Spearman ≥ 0,91). Ou seja, a matéria sozinha não define uma métrica bem-comportada, e a força de cor é o que a organiza.
 
 ### v0.9 — pendências estruturais de H2: localidade, cone de luz e o caminho para Einstein
 
@@ -258,6 +258,17 @@ Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (mét
 
 **Limite honesto:** a parte universal identifica a contribuição dos modos de borda pelo argumento de Casini-Huerta e Donnelly-Wall (Maxwell físico = 2 escalares sem l = 0); o que calculo é o bloco l = 0 e o termo de contato no esquema da ponte. Não implementei a teoria de Maxwell completa na rede cúbica com centro elétrico.
 
+## Checagem de novidade (19/11/2026)
+
+Os dois achados que pareciam originais foram confrontados com a literatura e **reclassificados como corolários conhecidos**:
+
+1. **"O confinamento aperta a geometria"** (v0.6–v0.8): explicado por *gap ⇒ correlações exponenciais ⇒ informação mútua local* (Hastings-Koma; Wolf, Verstraete, Hastings & Cirac, PRL 100, 070502, 2008). Aumentar o acoplamento de gauge aumenta o gap. Medidas de emaranhamento não distinguem teoria confinante de teoria apenas com gap (arXiv:2010.09392; arXiv:2401.01930). Leitura correta: **o gap gerado pela força** aperta a geometria. Teste discriminante planejado: comparar gap de gauge e gap sem gauge, com o mesmo gap.
+2. **"Sem força, a métrica não é monotônica"** (v0.8): são as oscilações de paridade universais das entropias em cadeias críticas (Calabrese, Campostrini, Essler & Nienhuis, PRL 104, 095701, 2010), suprimidas pelo gap.
+
+Vizinhança da tese: Szangolies (arXiv:2512.17328) é o trabalho conceitual mais próximo (grupo do MP a partir de emaranhamento de qubits; espaço-tempo da parte de lei de área; sem testes numéricos). Wang & Braunstein (arXiv:2606.27402) mostram que gauge SU(2) puro não gera geometria em estados típicos, o que é coerente com o código tórico (v0.4).
+
+O que pode ter valor original: (i) geometria emergente de **estados fundamentais de teorias de gauge com matéria**, com controles negativos sistemáticos (precisa de busca mais funda); (ii) o teste discriminante gap × confinamento; (iii) a síntese reprodutível H1 + H2 + ponte, que tem valor metodológico e não é descoberta.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -271,6 +282,7 @@ Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (mét
 - [ ] H2: QED₃ dinâmica (U(1) compacto em 2+1D) via DMRG em cilindro
 - [x] H2: SU(2) em 1+1D com férmions (v0.7)
 - [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
+- [ ] H2: teste discriminante — mesmo gap, com e sem gauge
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
