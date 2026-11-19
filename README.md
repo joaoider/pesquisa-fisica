@@ -207,6 +207,24 @@ Nota de método: perturbações de potencial local não servem para testar a pri
 
 **Pendente:** o passo holográfico, que é impor δS = δ⟨K⟩ para *todas* as regiões e reconstruir um bulk com dimensão extra (⇒ Einstein linearizado). Exige um modelo de brinquedo holográfico (redes tensoriais HaPPY/MERA).
 
+### v0.10 — passo holográfico: da rede tensorial até Einstein linearizado
+
+Arquivo: `tests/h2/test_h2_t1_holografia_einstein.py`. A cadeia lógica é: RT (Ryu-Takayanagi), mais a primeira lei para **todos** os intervalos, equivale a Einstein linearizado no bulk (Faulkner et al. 2014). Em AdS₃/CFT₂ isso é a equação **(∇²_dS₂ + 2) δS = 0** no espaço dos intervalos (x, R), que é um de Sitter dS₂ (de Boer, Heller, Myers & Neiman 2015).
+
+| Predição | Resultado |
+|---|---|
+| **(a)** Rede de tensores perfeitos (código de 5 qubits, árvore de 6 tensores, 20 qubits de borda + 1 de bulk) | Tensor perfeito ✔. **RT discreto exato** S(A) = corte mínimo em todos os intervalos contíguos testados; em regiões arbitrárias, S ≤ corte mínimo sempre e igualdade em 98% (violações de exatamente 1 bit) |
+| **(a)** Cunha de emaranhamento / correção de erros | Qubit de bulk recuperável (I = 2 bits) ⇔ a região cobre ≥ 3 de 5 blocos; 1 ou 2 blocos: I = 0 |
+| **(b)** Klein-Gordon em dS₂ para δS calculado do estado quântico (cadeia de 2000 sítios, 81 centros × 47 raios) | **CFT: resíduo mediano 0,2–0,3% (máx. ~1%)**. Gapped (dimerizada): 10–56%, ≥ 40× pior |
+| **(c)** Bulk AdS₃ reconstruído **só de intervalos pequenos** (R ≤ 8) prevê, via geodésicas RT numéricas, intervalos grandes (R = 30–60) | **CFT: erro máximo 0,2–3,7%** (gaussiana, dois picos, onda). Gapped: erro de 17× (falha) |
+| **(d)** G do bulk fixado pela matéria (Brown-Henneaux G = 3ℓ/2c) | c medido = 0,994 ⇒ G = 1,51; duas espécies ⇒ c = 2 ⇒ G à metade (o mesmo que 1/G ∝ N na H1) |
+
+**Leitura:** a cadeia fecha. Matéria crítica na rede tem Hamiltoniano de emaranhamento geométrico (v0.9) e primeira lei (v0.9). Para todos os intervalos, seu δS obedece à equação que, holograficamente, é Einstein linearizado (b). Um bulk reconstruído de dados locais prevê o emaranhamento em escalas grandes (c). E a constante de Newton desse bulk é fixada pela quantidade de matéria (d). Sem criticalidade (cadeia gapped), nada disso funciona.
+
+**Bugs encontrados e corrigidos no caminho:** fator 2 duplicado na reconstrução (1/v contado duas vezes) e cobertura insuficiente dos intervalos pequenos para perfis largos.
+
+**Limites honestos:** AdS₃ não tem grávitons locais, então Einstein linearizado em 3D é "fraco" (a geometria fica fixada pelo tensor de energia-momento da borda). O caso não trivial é d ≥ 3 (bulk ≥ 4D), que exige CFTs em 2+1D. A rede tensorial é pequena (árvore, sem laços). E a correspondência holográfica entra como pressuposto da ligação "(b) ⟺ Einstein": o que se testa é a parte da borda.
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -226,7 +244,8 @@ Nota de método: perturbações de potencial local não servem para testar a pri
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
 - [x] H2: Hamiltoniano de emaranhamento geométrico + primeira lei (v0.9)
-- [ ] H2: passo holográfico → Einstein linearizado (rede tensorial HaPPY/MERA)
+- [x] H2: passo holográfico → Einstein linearizado (rede de tensores perfeitos + Klein-Gordon em dS₂ + reconstrução do bulk) (v0.10)
+- [ ] H2: Einstein linearizado em d ≥ 3 (CFT 2+1D, bulk 4D com grávitons) e redes tensoriais com laços (HaPPY completo/MERA)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
 - [ ] Weinberg-Witten: identificar formalmente qual hipótese é violada (T0)
 - [ ] Ação efetiva quadrática em h_ab: gráviton sem massa, 2 polarizações, c_g = c (T1/T2)
@@ -250,6 +269,10 @@ Nota de método: perturbações de potencial local não servem para testar a pri
 - J. J. Bisognano, E. H. Wichmann, J. Math. Phys. 16, 985 (1975); 17, 303 (1976)
 - V. Eisler, I. Peschel, *Analytical results for the entanglement Hamiltonian of a free-fermion chain*, J. Phys. A 50, 284003 (2017), arXiv:1703.08126
 - T. Jacobson, *Entanglement equilibrium and the Einstein equation*, PRL 116, 201101 (2016), arXiv:1505.04753
+- S. Ryu, T. Takayanagi, PRL 96, 181602 (2006), arXiv:hep-th/0603001
+- F. Pastawski, B. Yoshida, D. Harlow, J. Preskill, *Holographic quantum error-correcting codes* (HaPPY), JHEP 06, 149 (2015), arXiv:1503.06237
+- J. de Boer, M. P. Heller, R. C. Myers, Y. Neiman, *Holographic de Sitter geometry from entanglement in CFTs*, PRL 116, 061602 (2016), arXiv:1509.00113
+- J. D. Brown, M. Henneaux, Commun. Math. Phys. 104, 207 (1986)
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)

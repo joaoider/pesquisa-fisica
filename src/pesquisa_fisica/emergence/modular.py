@@ -104,3 +104,77 @@ def first_law_bonds(N: int, ell: int, f: np.ndarray, eps: float, K_exact: np.nda
     dK_bw = float(np.sum(beta * (bond(C1) - bond(C0))))
     dK_ex = None if K_exact is None else float(np.sum(K_exact * (C1[A, A] - C0[A, A])))
     return dS, dK_bw, dK_ex
+
+
+# ---------------------------------------------------------------- δS para todos os intervalos: "espaço cinemático" dS₂
+
+def chain_correlation_general(N: int, hopping: np.ndarray) -> np.ndarray:
+    h = np.zeros((N, N))
+    for i in range(N - 1):
+        h[i, i + 1] = h[i + 1, i] = -hopping[i]
+    e, U = np.linalg.eigh(h)
+    occ = U[:, : N // 2]
+    return occ @ occ.T
+
+
+def delta_S_grid(C0: np.ndarray, C1: np.ndarray, centers: np.ndarray, radii: np.ndarray) -> np.ndarray:
+    """δS(x, R) para intervalos [x − R + ½, x + R − ½] (2R sítios, centro x numa ligação).
+    centers: posições de ligação x (o intervalo começa no sítio x − R + 1 se x é a ligação entre x e x+1)."""
+    out = np.zeros((len(centers), len(radii)))
+    for i, x in enumerate(centers):
+        for j, R in enumerate(radii):
+            a = int(x) - int(R) + 1
+            A = slice(a, a + 2 * int(R))
+            out[i, j] = fermion_entropy(C1[A, A]) - fermion_entropy(C0[A, A])
+    return out
+
+
+def ds2_klein_gordon_residual(dS: np.ndarray, radii: np.ndarray) -> np.ndarray:
+    """R²(−∂²_R + ∂²_x) δS + 2 δS por diferenças finitas (passo 1 em x e em R), pontos internos.
+    Para uma CFT₂ com Bisognano-Wichmann (⇔ holograficamente: Einstein linearizado em AdS₃), é zero."""
+    d2R = dS[1:-1, 2:] - 2 * dS[1:-1, 1:-1] + dS[1:-1, :-2]
+    d2x = dS[2:, 1:-1] - 2 * dS[1:-1, 1:-1] + dS[:-2, 1:-1]
+    R = radii[1:-1][None, :]
+    return R**2 * (-d2R + d2x) + 2 * dS[1:-1, 1:-1]
+
+
+def bw_kernel_matrix(centers, radii, y) -> np.ndarray:
+    """δS(x,R) ≈ Σ_y K[(x,R), y] ε(y): núcleo β = 2π(R² − u²)/(2R v), v = 2 ⇒ π(R² − u²)/(2R),
+    u = y − x (ε = variação da energia da ligação y)."""
+    rows = []
+    for x in centers:
+        for R in radii:
+            u = y - x
+            rows.append(np.where(np.abs(u) < R, np.pi * (R**2 - u**2) / (R * 2.0), 0.0))
+    return np.array(rows)
+
+
+# ---------------------------------------------------------------- bulk AdS₃ reconstruído e geodésicas (RT)
+
+def central_charge_from_chain(N: int = 2000, lengths=np.arange(20, 200, 10)) -> float:
+    """c pelo ajuste S = (c/6) ln[(2N/π) sin(πℓ/N)] + const no meio da cadeia aberta (Calabrese-Cardy, 1 borda
+    distante: usamos intervalos centrais e a forma de cadeia infinita S = (c/3) ln ℓ + const)."""
+    C = chain_correlation_general(N, np.ones(N - 1))
+    S = [fermion_entropy(C[N // 2 - L // 2: N // 2 - L // 2 + L, N // 2 - L // 2: N // 2 - L // 2 + L]) for L in lengths]
+    return float(3 * np.polyfit(np.log(lengths), S, 1)[0])
+
+
+def reconstruct_energy_density(dS_small: np.ndarray, centers, radii_small, y, reg: float = 1e-6) -> np.ndarray:
+    """Inverte δS(x, R) = Σ_y K ε(y) usando SÓ intervalos pequenos (mínimos quadrados com Tikhonov)."""
+    K = bw_kernel_matrix(centers, radii_small, y)            # já inclui 1/v (v = 2)
+    b = dS_small.ravel()
+    A = K.T @ K + reg * np.trace(K.T @ K) / K.shape[1] * np.eye(K.shape[1])
+    return np.linalg.solve(A, K.T @ b)
+
+
+def rt_geodesic_delta_S(eps_y: np.ndarray, y: np.ndarray, x: float, R: float, G: float, n_theta: int = 4000) -> float:
+    """δS = δL/(4G) pela variação do comprimento da geodésica semicircular z² + (y−x)² = R² no AdS₃ com
+    métrica perturbada g = [dz² + (1 + z² t_xx) dx² + …]/z², t_xx(y) = 8πG ε(y)/v  (Fefferman-Graham, ℓ_AdS = 1).
+    Integral feita numericamente em θ, independente da fórmula do núcleo."""
+    th = np.linspace(1e-6, np.pi - 1e-6, n_theta)
+    yy = x + R * np.cos(th)
+    t_xx = 8 * np.pi * G * np.interp(yy, y, eps_y, left=0.0, right=0.0) / 2.0
+    # δL = ½ ∫ δg_xx (dx/dθ)² / |dX/dθ|_g dθ, δg_xx = t_xx (o fator z² cancela com 1/z²)
+    integrand = 0.5 * t_xx * (R * np.sin(th)) ** 2 * np.sin(th)
+    dL = np.trapezoid(integrand, th)
+    return float(dL / (4 * G))

@@ -84,8 +84,4 @@ def test_reescala_uniforme_nao_muda_nada(K_exato):
     assert abs(dS) < 1e-10 and abs(dK_bw) < 1e-10 and abs(dK_ex) < 1e-10
 
 
-@pytest.mark.skip(reason="Pendente: passo holográfico — impor δS = δ⟨K⟩ para TODAS as regiões e reconstruir a "
-                         "geometria de um bulk com dimensão extra (Faulkner et al. 2014: ⇒ Einstein linearizado). "
-                         "Exige um modelo de brinquedo holográfico (redes tensoriais/HaPPY ou MERA).")
-def test_einstein_linearizado_holografico():
-    ...
+# O passo holográfico (Einstein linearizado) está em test_h2_t1_holografia_einstein.py (v0.10).
