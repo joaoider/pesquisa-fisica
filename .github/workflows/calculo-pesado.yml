@@ -1,0 +1,47 @@
+name: Cálculo pesado
+
+# Disparo manual (aba Actions → "Cálculo pesado" → Run workflow).
+# Runner padrão de repositório público: 4 vCPU, 16 GB RAM, gratuito.
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: "Script em scripts/ (sem .py)"
+        default: "su3_n8"
+        required: true
+      args:
+        description: "Argumentos extras (ex.: --N 8 --J 0 0.5 2 5)"
+        default: ""
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  calcular:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Máquina
+        run: nproc && free -h
+      - name: Rodar ${{ github.event.inputs.script }}
+        run: python scripts/${{ github.event.inputs.script }}.py ${{ github.event.inputs.args }}
+      - name: Guardar resultados como artefato
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-${{ github.event.inputs.script }}
+          path: results/
+      - name: Gravar resultados no repositório
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git diff --cached --quiet || git commit -m "Resultados: ${{ github.event.inputs.script }} (run ${{ github.run_id }})"
+          git push
