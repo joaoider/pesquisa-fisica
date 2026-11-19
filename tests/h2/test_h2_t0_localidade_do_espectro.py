@@ -29,7 +29,7 @@ def termos5():
 def test_espectro_local_e_reconhecido_so_pelos_autovalores(termos5, seed):
     rng = np.random.default_rng(100 + seed)
     E = np.linalg.eigvalsh(hamiltonian(rng.standard_normal(len(termos5)), termos5))
-    err, _ = fit_spectrum(E, termos5, n_starts=20, seed=seed)
+    err, _ = fit_spectrum(E, termos5, n_starts=60, seed=seed)
     assert err < 1e-10
 
 
@@ -37,7 +37,9 @@ def test_espectro_local_n6_64_niveis():
     termos = ansatz_terms(6)
     rng = np.random.default_rng(7)
     E = np.linalg.eigvalsh(hamiltonian(rng.standard_normal(len(termos)), termos))
-    err, _ = fit_spectrum(E, termos, n_starts=20, seed=0)
+    # o ajuste é uma BUSCA com mínimos locais: mais pontos de partida (para no primeiro sucesso) — v0.11:
+    # com 20 partidas, o runner do CI ficou preso uma vez (erro 2,8e-3) por diferenças de ponto flutuante
+    err, _ = fit_spectrum(E, termos, n_starts=80, seed=0)
     assert err < 1e-10
 
 
