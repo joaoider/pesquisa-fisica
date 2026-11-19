@@ -90,6 +90,23 @@ H = −Δ Σ A_v − J Σ B_p − h Σ X_l − λ Σ Z_l, em que A_v é a carga 
 
 **Limitações:** rede 3×3 é pequena demais para estimar a dimensão; a localidade ainda está na rede do Hamiltoniano; Z₂ é discreto (não é nenhuma das 3 forças reais).
 
+### v0.5 — Z₂ com matéria em redes grandes: modelo de Kitaev no favo de mel
+
+O modelo de Kitaev (2006) é exatamente uma teoria de gauge Z₂ (u_jk = ±1 nas ligações) acoplada a matéria de Majorana, com solução exata em qualquer tamanho de rede: até **L = 32 (1024 células, 2048 Majoranas)**, sem aproximação. A parte de gauge do emaranhamento é só termo de fronteira (Yao & Qi 2010). Arquivo: `tests/h2/test_h2_t1_z2_rede_grande.py`.
+
+Novo estimador, que usa só a **ordem** da informação mútua (serve para fases gapped e críticas): grafo dos 6 parceiros mais emaranhados de cada célula, mais distâncias de grafo.
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Solver correto | **Passou.** Energia idêntica por duas rotas (espaço real × momentos, 10⁻¹⁰) e −0,7873 por spin (literatura: −0,7872); vórtices custam energia (Lieb) |
+| **P2.** Invariância de gauge | **Passou.** I idêntica (10⁻¹⁰) após transformação de gauge aleatória |
+| **P3.** Fase crítica B: o grafo emergente É a rede real | **Passou.** Precisão 1,0 em L = 14, 20, 26, 32; mesmo diâmetro (13) e mesma dimensão de crescimento de bolas; vale também com acoplamentos anisotrópicos |
+| **P4.** Fase gapped A: 2D, métrica deformada | **Passou.** 6 vizinhos emergentes por célula, conectado, dimensão a ±0,3 da real; só 4/6 arestas coincidem: os dímeros fortes (z) deixam as células 50× mais emaranhadas ao longo de a₂, e o espaço emergente fica "comprimido" nessa direção |
+| **P5.** Fundo de gauge desordenado | **Passou.** Precisão 0,78 e ρ = 0,89: degrada, não destrói |
+| **P6.** Controle negativo | **Passou.** Grafo aleatório: diâmetro 5 (vs 13), ρ ≈ 0 |
+
+**Leitura física:** com matéria acoplada a um campo de gauge Z₂, a geometria emergente é robusta em redes grandes. E ela é definida pelo **emaranhamento**, não pelo desenho da rede: na fase A a mesma rede dá uma métrica diferente. Isso é o comportamento esperado se o espaço é feito de emaranhamento.
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -99,7 +116,8 @@ H = −Δ Σ A_v − J Σ B_p − h Σ X_l − λ Σ Z_l, em que A_v é a carga 
 - [ ] Reformular o pressuposto: que setor de reguladores (compatível com "só 3 forças") fixa G > 0 e Λ ~ M_Pl? Candidatos: torres de Kaluza-Klein (Partouche & de Vaulchier 2019), espectro de cordas, QCD-like com escala de Planck
 - [ ] Conferir convenções de sinal contra Adler (1982) / Frolov-Fursaev
 - [x] H2: geometria a partir de teoria de gauge na rede, Z₂ com matéria (v0.4)
-- [ ] H2: Z₂ em redes grandes (PEPS/DMRG) para estimar a dimensão emergente
+- [x] H2: Z₂ com matéria em redes grandes (Kitaev, exato até 2048 Majoranas) (v0.5)
+- [ ] H2: Z₂ com matéria bosônica (Fradkin-Shenker) em redes grandes via PEPS/DMRG, para comparar com a matéria fermiônica
 - [ ] H2: U(1) (eletromagnetismo compacto) e SU(2)/SU(3) na rede, com matéria fermiônica
 - [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
@@ -124,4 +142,6 @@ H = −Δ Σ A_v − J Σ B_p − h Σ X_l − λ Σ Z_l, em que A_v é a carga 
 - T. Jacobson, *Black hole entropy and induced gravity*, arXiv:gr-qc/9404039
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
+- A. Kitaev, *Anyons in an exactly solved model and beyond*, Ann. Phys. 321, 2 (2006), arXiv:cond-mat/0506438
+- H. Yao, X.-L. Qi, *Entanglement entropy and entanglement spectrum of the Kitaev model*, PRL 105, 080501 (2010), arXiv:1001.1165
 - S. Trebst, P. Werner, M. Troyer, K. Shtengel, C. Nayak, *Breakdown of a topological phase*, PRL 98, 070602 (2007), arXiv:cond-mat/0609048

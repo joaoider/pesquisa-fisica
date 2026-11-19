@@ -98,11 +98,6 @@ def test_dualidade_h_lambda(estados):
 
 # ---------------------------------------------------------------- pendentes
 
-@pytest.mark.skip(reason="Pendente: dimensão emergente exige redes ≥ 6×6 (72+ qubits): estados de rede tensorial (PEPS/DMRG).")
-def test_dimensao_emergente_z2_em_rede_grande():
-    ...
-
-
 @pytest.mark.skip(reason="Pendente: U(1) (eletromagnetismo) e SU(2)/SU(3) na rede, com matéria fermiônica.")
 def test_geometria_de_u1_e_su_n():
     ...
