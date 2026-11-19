@@ -12,9 +12,10 @@ from __future__ import annotations
 import numpy as np
 
 
-def emergent_distances(I: np.ndarray, floor: float = 1e-300) -> np.ndarray:
+def emergent_distances(I: np.ndarray, floor: float = 1e-300, tol: float = 1e-12) -> np.ndarray:
+    """tol: informação mútua abaixo disso é ruído de arredondamento (precisão dupla), tratada como zero."""
     Imax = I.max()
-    if Imax <= 0:
+    if Imax <= tol:
         raise ValueError("informação mútua nula: o estado não define geometria (estado produto)")
     D = -np.log(np.maximum(I, floor) / Imax)
     np.fill_diagonal(D, 0.0)
