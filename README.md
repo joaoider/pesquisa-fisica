@@ -107,6 +107,33 @@ Novo estimador, que usa só a **ordem** da informação mútua (serve para fases
 
 **Leitura física:** com matéria acoplada a um campo de gauge Z₂, a geometria emergente é robusta em redes grandes. E ela é definida pelo **emaranhamento**, não pelo desenho da rede: na fase A a mesma rede dá uma métrica diferente. Isso é o comportamento esperado se o espaço é feito de emaranhamento.
 
+### v0.6 — U(1) com férmions (eletromagnetismo na rede)
+
+**A. Modelo de Schwinger (QED em 1+1D), U(1) dinâmico, diagonalização exata com N = 20 sítios staggered (10 células, 184 756 estados).** A lei de Gauss elimina o campo elétrico e deixa um Hamiltoniano de qubits com acoplamento coulombiano de *todos com todos*. Arquivo: `tests/h2/test_h2_t1_u1_schwinger.py`.
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Solver correto | **Passou.** J = 0 reproduz férmions livres (10⁻⁹); carga total nula |
+| **P2.** Hamiltoniano de qubits não local | **Confirmado.** 90% dos pares acoplados; qubits a 10 sítios acoplam 9× mais que um par vizinho (potencial linear do confinamento) |
+| **P3.** Geometria emergente é a cadeia local | **Passou.** Vizinhos recíprocos = cadeia exata (precisão = recall = 1) para J = 0; 0,5; 2 |
+| **P4.** Gauge mais forte ⇒ emaranhamento mais local | **Passou.** Razão I(vizinhos)/I(distância 3): 42 → 289 → 9130 |
+
+**B. Férmions em 2D num fundo U(1) com fluxo, rede 20×20 (400 sítios), exato.** O campo de gauge aqui é **estático** (campo médio da QED₃). Arquivo: `tests/h2/test_h2_t1_u1_fundo_2d.py`.
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Invariância de gauge U(1) | **Passou.** Mesmo fluxo e mesma I (10⁻¹⁵) após fases aleatórias e^{iθ_j} |
+| **P2.** Rede emerge em todo fundo de fluxo | **Passou.** Precisão 1 para Φ = 0 (metal), π (Dirac), 2π/4 e 2π/5 (Hofstadter) |
+| **P3.** Fluxo muda a escala, não a vizinhança | **Passou.** I entre vizinhos: 0,168 (Φ = 0) × 0,239 (Φ = π) |
+| **P4.** Fluxo aleatório não destrói | **Passou.** Precisão 1 com desordem até ±π |
+| **P5.** Controle negativo | **Passou.** Diâmetro 6 (vs 20), ρ ≈ 0 |
+
+Observação: a meio preenchimento a informação mútua entre sítios da mesma sub-rede é exatamente zero (simetria partícula-buraco).
+
+**Leitura física:** o resultado mais forte é o do Schwinger. O Hamiltoniano, escrito nos graus de liberdade de qubit, é não local; ainda assim, a geometria emergente do emaranhamento é a cadeia local, e o confinamento (acoplamento de gauge forte) **aumenta** essa localidade. Nesse modelo, é a força eletromagnética que "aperta" a geometria.
+
+**Limitações:** U(1) dinâmico só em 1+1D; em 2D o fundo é estático (campo médio). QED₃ dinâmica exige DMRG/Monte Carlo.
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -118,7 +145,9 @@ Novo estimador, que usa só a **ordem** da informação mútua (serve para fases
 - [x] H2: geometria a partir de teoria de gauge na rede, Z₂ com matéria (v0.4)
 - [x] H2: Z₂ com matéria em redes grandes (Kitaev, exato até 2048 Majoranas) (v0.5)
 - [ ] H2: Z₂ com matéria bosônica (Fradkin-Shenker) em redes grandes via PEPS/DMRG, para comparar com a matéria fermiônica
-- [ ] H2: U(1) (eletromagnetismo compacto) e SU(2)/SU(3) na rede, com matéria fermiônica
+- [x] H2: U(1) com férmions: Schwinger dinâmico em 1+1D e fundo de fluxo em 2D (v0.6)
+- [ ] H2: QED₃ dinâmica (U(1) compacto em 2+1D) via DMRG em cilindro
+- [ ] H2: SU(2) e SU(3) na rede com férmions (força fraca e forte)
 - [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
 - [ ] H2: primeira lei do emaranhamento → Einstein linearizado (Faulkner et al. 2014)
@@ -142,6 +171,9 @@ Novo estimador, que usa só a **ordem** da informação mútua (serve para fases
 - T. Jacobson, *Black hole entropy and induced gravity*, arXiv:gr-qc/9404039
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
+- J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)
+- E. A. Martinez et al., *Real-time dynamics of lattice gauge theories with a few-qubit quantum computer*, Nature 534, 516 (2016), arXiv:1605.04570
+- D. R. Hofstadter, Phys. Rev. B 14, 2239 (1976)
 - A. Kitaev, *Anyons in an exactly solved model and beyond*, Ann. Phys. 321, 2 (2006), arXiv:cond-mat/0506438
 - H. Yao, X.-L. Qi, *Entanglement entropy and entanglement spectrum of the Kitaev model*, PRL 105, 080501 (2010), arXiv:1001.1165
 - S. Trebst, P. Werner, M. Troyer, K. Shtengel, C. Nayak, *Breakdown of a topological phase*, PRL 98, 070602 (2007), arXiv:cond-mat/0609048

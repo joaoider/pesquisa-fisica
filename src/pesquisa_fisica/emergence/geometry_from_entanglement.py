@@ -57,15 +57,17 @@ def upper(M: np.ndarray) -> np.ndarray:
 # ---------------------------------------------------------------- estimadores que só usam a ORDEM da informação mútua
 # (não dependem de I decair exponencialmente ou como lei de potência: servem para fases gapped e críticas)
 
-def knn_graph(S: np.ndarray, k: int) -> np.ndarray:
-    """Grafo simétrico ligando cada grau de liberdade aos k parceiros de maior S (ex.: informação mútua)."""
+def knn_graph(S: np.ndarray, k: int, mutual: bool = False) -> np.ndarray:
+    """Grafo ligando cada grau de liberdade aos k parceiros de maior S (ex.: informação mútua).
+    mutual=False: união (i escolhe j OU j escolhe i); mutual=True: só escolhas recíprocas
+    (evita arestas espúrias nas bordas de redes abertas)."""
     n = len(S)
-    S = S.astype(float).copy()
+    S = np.real(S).astype(float).copy()
     np.fill_diagonal(S, -np.inf)
     nb = np.argsort(S, axis=1)[:, ::-1][:, :k]
     A = np.zeros((n, n), dtype=bool)
     A[np.repeat(np.arange(n), k), nb.ravel()] = True
-    return A | A.T
+    return (A & A.T) if mutual else (A | A.T)
 
 
 def graph_distances(A: np.ndarray) -> np.ndarray:

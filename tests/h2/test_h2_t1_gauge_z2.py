@@ -98,6 +98,6 @@ def test_dualidade_h_lambda(estados):
 
 # ---------------------------------------------------------------- pendentes
 
-@pytest.mark.skip(reason="Pendente: U(1) (eletromagnetismo) e SU(2)/SU(3) na rede, com matéria fermiônica.")
-def test_geometria_de_u1_e_su_n():
+@pytest.mark.skip(reason="Pendente: SU(2)/SU(3) na rede com férmions (U(1) feito em v0.6: test_h2_t1_u1_*.py).")
+def test_geometria_de_su_n():
     ...
