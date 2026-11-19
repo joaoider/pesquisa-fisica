@@ -1,6 +1,6 @@
 [project]
 name = "pesquisa-fisica"
-version = "0.2.0"
+version = "0.3.0"
 description = "Gravidade emergente das três forças (gravidade induzida) com bateria de testes T0–T3"
 requires-python = ">=3.10"
 dependencies = ["sympy>=1.12", "numpy>=1.24"]

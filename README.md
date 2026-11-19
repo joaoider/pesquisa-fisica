@@ -35,6 +35,7 @@ src/pesquisa_fisica/
   heat_kernel.py      # coeficientes de Seeley-DeWitt a_1, a_2 + espectro exato em S^d
   induced_gravity.py  # 1/G induzido por conteúdo de campos (corte de tempo próprio)
   schemes.py          # Pauli-Villars, regularização dimensional/zeta, sensibilidade de sinal
+  emergence/          # H2: emaranhamento, geometria a partir da informação mútua, Page-Wootters
 tests/                # bateria T0–T3
 notebooks/            # explorações
 docs/                 # derivações e notas
@@ -57,12 +58,35 @@ docs/                 # derivações e notas
 6. **Regularização dimensional / zeta (T0).** Campos sem massa não induzem G nenhum. Com as massas do MP, a parte finita é |1/G| ~ 10⁴ GeV², **~34 ordens de grandeza abaixo de M_Pl²**, e depende da escala μ: G vira um contratermo, não uma predição.
 7. **Veredito v0.2** (registrado como `xfail` em `test_sinal_de_G_independente_de_esquema`): o sinal de G induzido pelo MP **não é independente de esquema**. A tese, na forma "MP + 3 forças bastam", precisa de um ingrediente extra: uma física de reguladores na escala de Planck (campos pesados, cordas, estrutura discreta…) cujo espectro decide G. Essa física passa a ser parte do pressuposto.
 
+## H2 — o próprio espaço-tempo emerge (v0.3)
+
+O veredito v0.2 mostrou que a versão de Sakharov (**H1**: dado um espaço-tempo, a *dinâmica* da gravidade emerge) não basta: G é fixado pelo setor ultravioleta. A hipótese original é mais forte:
+
+> **H2:** as únicas interações fundamentais são forte, fraca e eletromagnética; **espaço e tempo** se formam a partir dessas forças e da matéria (via emaranhamento). O setor ultravioleta *é* a estrutura de onde o espaço-tempo sai.
+
+Testes em `tests/h2/` (modelos de brinquedo de matéria livre na rede, cálculo exato de estados gaussianos):
+
+| Teste | Resultado |
+|---|---|
+| T0 · Lei de área: S ∝ fronteira (2D), S = (c/3) ln L (1D) | **Passou.** c = 1,0002; S linear no perímetro com r > 0,9999 |
+| T1 · Distâncias a partir da informação mútua (d = −ln I/I_max) | **Passou.** Spearman com as distâncias reais: 0,9995 (1D), 0,992 (2D), 0,994 (3D) |
+| T1 · Dimensão emergente (dimensão de correlação) | **Passou.** 1,23 / 2,25 / 3,15 para redes 1D / 2D / 3D |
+| T1 · Controle negativo: acoplamentos não locais aleatórios | **Passou.** Dimensão ≈ 6, sem correlação com uma grade (ρ ≈ 0) |
+| T0 · Tempo emergente (Page-Wootters) | **Passou.** Universo estacionário; estado condicional obedece Schrödinger com fidelidade 1; sem emaranhamento relógio-sistema, não há tempo |
+
+**Limitações honestas:** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
 - [x] Testar a dependência de esquema (tempo próprio, Pauli-Villars, dimensional/zeta)
 - [ ] Reformular o pressuposto: que setor de reguladores (compatível com "só 3 forças") fixa G > 0 e Λ ~ M_Pl? Candidatos: torres de Kaluza-Klein (Partouche & de Vaulchier 2019), espectro de cordas, QCD-like com escala de Planck
 - [ ] Conferir convenções de sinal contra Adler (1982) / Frolov-Fursaev
+- [ ] H2: geometria a partir de teoria de gauge na rede (Z2 → U(1) → SU(N)): o teste que liga H2 às "3 forças"
+- [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
+- [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
+- [ ] H2: primeira lei do emaranhamento → Einstein linearizado (Faulkner et al. 2014)
+- [ ] H2: assinatura lorentziana e cone de luz (Lieb-Robinson)
 - [ ] Weinberg-Witten: identificar formalmente qual hipótese é violada (T0)
 - [ ] Ação efetiva quadrática em h_ab: gráviton sem massa, 2 polarizações, c_g = c (T1/T2)
 - [ ] T3: coeficientes de R² e Weyl² fixados pelo Modelo Padrão (a_2) e desvios de Newton em curtas distâncias
@@ -75,3 +99,8 @@ docs/                 # derivações e notas
 - D. V. Vassilevich, *Heat kernel expansion: user's manual*, Phys. Rept. 388, 279 (2003)
 - S. Weinberg, E. Witten, Phys. Lett. B 96, 59 (1980)
 - H. Partouche, B. de Vaulchier, *Induced cosmological and Newton constants from towers of states*, arXiv:1912.09939
+- C. Cao, S. Carroll, S. Michalakis, *Space from Hilbert space*, Phys. Rev. D 95, 024031 (2017), arXiv:1606.08444
+- M. Van Raamsdonk, *Building up spacetime with quantum entanglement*, Gen. Rel. Grav. 42, 2323 (2010), arXiv:1005.3035
+- D. Page, W. Wootters, Phys. Rev. D 27, 2885 (1983)
+- P. Calabrese, J. Cardy, J. Stat. Mech. P06002 (2004), arXiv:hep-th/0405152
+- T. Jacobson, *Black hole entropy and induced gravity*, arXiv:gr-qc/9404039
