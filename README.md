@@ -74,7 +74,23 @@ Testes em `tests/h2/` (modelos de brinquedo de matéria livre na rede, cálculo 
 | T1 · Controle negativo: acoplamentos não locais aleatórios | **Passou.** Dimensão ≈ 6, sem correlação com uma grade (ρ ≈ 0) |
 | T0 · Tempo emergente (Page-Wootters) | **Passou.** Universo estacionário; estado condicional obedece Schrödinger com fidelidade 1; sem emaranhamento relógio-sistema, não há tempo |
 
-**Limitações honestas:** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
+### v0.4 — geometria a partir de uma teoria de gauge: Z₂ com matéria
+
+Modelo de gauge-Higgs de Z₂ (Fradkin-Shenker), calibre unitário, diagonalização exata numa rede 3×3 periódica (18 qubits de ligação):
+H = −Δ Σ A_v − J Σ B_p − h Σ X_l − λ Σ Z_l, em que A_v é a carga de matéria, B_p o fluxo magnético, h o campo elétrico (confinamento) e λ o salto da matéria (Higgs). Arquivo: `tests/h2/test_h2_t1_gauge_z2.py`.
+
+| Predição | Resultado |
+|---|---|
+| **P1.** Só a estrutura de gauge, sem flutuações (código tórico, h = λ = 0): informação mútua entre ligações exatamente zero, nenhuma geometria local | **Confirmada.** I_max < 10⁻¹²: o estado é emaranhado, mas de forma topológica (não local) |
+| **P2.** Com campo elétrico e/ou matéria, os pares mais emaranhados são os vizinhos reais, em todas as fases | **Confirmada.** Precisão 1,0 (72 de 72) nas fases desconfinada, mista, confinada e de Higgs; vizinhos 25× a 2400× mais emaranhados que pares distantes |
+| Perto da transição de fase a geometria "borra" | **Observado.** Contraste perto/longe cai para ~7× em (h, λ) = (0,6; 0,6) |
+| **P3.** Dualidade elétrico-magnética: (h, 0) ≡ (0, h) | **Confirmada** (energia e espectro de I idênticos a 10⁻⁸) |
+
+**Leitura física:** as "forças" sozinhas (gauge puro, sem flutuação) não geram geometria local; é preciso **flutuação de campo ou matéria** para que o emaranhamento fique local e revele a vizinhança. Isso repete, por outro caminho, o resultado de H1 (bósons de gauge sozinhos induzem G < 0) e a intuição de que "naturalmente precisaria de matéria".
+
+**Limitações:** rede 3×3 é pequena demais para estimar a dimensão; a localidade ainda está na rede do Hamiltoniano; Z₂ é discreto (não é nenhuma das 3 forças reais).
+
+**Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
 
@@ -82,7 +98,9 @@ Testes em `tests/h2/` (modelos de brinquedo de matéria livre na rede, cálculo 
 - [x] Testar a dependência de esquema (tempo próprio, Pauli-Villars, dimensional/zeta)
 - [ ] Reformular o pressuposto: que setor de reguladores (compatível com "só 3 forças") fixa G > 0 e Λ ~ M_Pl? Candidatos: torres de Kaluza-Klein (Partouche & de Vaulchier 2019), espectro de cordas, QCD-like com escala de Planck
 - [ ] Conferir convenções de sinal contra Adler (1982) / Frolov-Fursaev
-- [ ] H2: geometria a partir de teoria de gauge na rede (Z2 → U(1) → SU(N)): o teste que liga H2 às "3 forças"
+- [x] H2: geometria a partir de teoria de gauge na rede, Z₂ com matéria (v0.4)
+- [ ] H2: Z₂ em redes grandes (PEPS/DMRG) para estimar a dimensão emergente
+- [ ] H2: U(1) (eletromagnetismo compacto) e SU(2)/SU(3) na rede, com matéria fermiônica
 - [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
 - [ ] H2: primeira lei do emaranhamento → Einstein linearizado (Faulkner et al. 2014)
@@ -104,3 +122,6 @@ Testes em `tests/h2/` (modelos de brinquedo de matéria livre na rede, cálculo 
 - D. Page, W. Wootters, Phys. Rev. D 27, 2885 (1983)
 - P. Calabrese, J. Cardy, J. Stat. Mech. P06002 (2004), arXiv:hep-th/0405152
 - T. Jacobson, *Black hole entropy and induced gravity*, arXiv:gr-qc/9404039
+- E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
+- A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
+- S. Trebst, P. Werner, M. Troyer, K. Shtengel, C. Nayak, *Breakdown of a topological phase*, PRL 98, 070602 (2007), arXiv:cond-mat/0609048

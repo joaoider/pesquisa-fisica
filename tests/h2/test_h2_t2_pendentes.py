@@ -15,12 +15,6 @@ def test_einstein_linearizado_do_emaranhamento():
     ...
 
 
-@pytest.mark.skip(reason="Pendente: trocar matéria livre por campos de gauge na rede (Z2 → U(1) → SU(N)) "
-                         "e repetir a reconstrução de geometria — o teste que liga H2 às '3 forças'.")
-def test_geometria_a_partir_de_teoria_de_gauge_na_rede():
-    ...
-
-
 @pytest.mark.skip(reason="Pendente: assinatura lorentziana — de onde vem o sinal (-,+,+,+)? Combinar Page-Wootters "
                          "com o espaço emergente e testar causalidade (cone de luz de Lieb-Robinson).")
 def test_assinatura_lorentziana_e_cone_de_luz():
