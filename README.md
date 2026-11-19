@@ -174,6 +174,39 @@ Veredito: **P1, P2 e P3 confirmadas em N = 8.** Informação mútua média por d
 
 **Achado novo:** sem a força (J = 0), a informação mútua a distância 3 **supera** a de distância 2 (0,135 × 0,099): as duas sub-redes de férmions livres se correlacionam entre si, e a ordem por distância se inverte (Spearman 0,77). Em N = 4 o efeito chega a ligar as pontas da cadeia. **Qualquer J > 0 restaura a ordem** (Spearman ≥ 0,91). Ou seja, a matéria sozinha não define uma métrica bem-comportada, e a força de cor é o que a organiza.
 
+### v0.9 — pendências estruturais de H2: localidade, cone de luz e o caminho para Einstein
+
+**1. Localidade a partir do espectro** (Cotler, Penington & Ranard 2019): `tests/h2/test_h2_t0_localidade_do_espectro.py`. Usando **só a lista de autovalores**, ajusta-se um ansatz de cadeia local (12 parâmetros) a espectros de 32 e 64 níveis.
+
+| Caso | Erro do ajuste |
+|---|---|
+| Espectro de Hamiltoniano local (n = 5 e 6) | **~10⁻¹⁴** (ajuste exato) |
+| Espectro genérico (GUE) | ~7×10⁻³ (falha) |
+| Espectro de Hamiltoniano não local | ~10⁻² a 3×10⁻² (falha) |
+
+Onze ordens de grandeza separam "existe fatoração local" de "não existe": o espectro sabe se o sistema pode ser lido como uma cadeia de vizinhos. **Inconclusivo:** com ansatz local *sem* invariância de translação (25 parâmetros, 128 níveis), o otimizador fica preso em mínimos locais (erro ~1,5×10⁻³ mesmo para alvo local). Encontrar a fatoração pode ser difícil mesmo quando ela existe.
+
+**2. Cone de luz, estrutura causal e isotropia de Lorentz:** `tests/h2/test_h2_t1_cone_de_luz.py`.
+
+| Predição | Resultado |
+|---|---|
+| Velocidade máxima finita (Lieb-Robinson) | Férmions livres, 401 sítios: frente linear com v = 2,13 (máx. de grupo 2); fora do cone, amplitude ~10⁻⁷ |
+| Estrutura causal (−,+) | Só 7×10⁻⁶ do peso em s² = (vt)² − r² < 0 |
+| Vale com interação | Cadeia de Heisenberg: chegada linear, v ≈ 6,7; sítio distante intocado em t = 0,3 (< 10⁻³) |
+| Isotropia de Lorentz emergente | Cone de Dirac (fluxo π): anisotropia ∝ q² (1,3% → 0,02%) e E/q → v = 2 (velocidade-limite); metal: 44% de anisotropia e E ∝ q² (sem velocidade-limite) |
+
+**3. Rumo a Einstein, com os ingredientes de Jacobson e Faulkner et al.:** `tests/h2/test_h2_t1_primeira_lei.py` (cadeia crítica de férmions, CFT c = 1).
+
+| Predição | Resultado |
+|---|---|
+| Hamiltoniano de emaranhamento local e geométrico (Bisognano-Wichmann, "temperatura de Unruh" β(x) = 2πx(ℓ−x)/(ℓv)) | **Passou.** R² = 0,998; coeficiente −1,04 a −1,05 (correção de rede de 5%); alcance par nulo; alcance 3 ≈ 2–3% |
+| Primeira lei δS = δ⟨K⟩ para perturbações da "métrica" (salto modulado) | **Passou.** Razão 0,990–0,999 com K exato e com K geométrico; linear em ε |
+| Reescala uniforme não muda nada | **Passou** (δS = δK = 0) |
+
+Nota de método: perturbações de potencial local não servem para testar a primeira lei a meio preenchimento (por simetria partícula-buraco só mudam a energia de ligação em 2ª ordem); com N = 400 apareceu um desvio de tamanho finito (razão até 0,63), resolvido com N = 2000.
+
+**Pendente:** o passo holográfico, que é impor δS = δ⟨K⟩ para *todas* as regiões e reconstruir um bulk com dimensão extra (⇒ Einstein linearizado). Exige um modelo de brinquedo holográfico (redes tensoriais HaPPY/MERA).
+
 **Limitações honestas (v0.3):** (1) o Hamiltoniano de brinquedo já é local numa rede, então o teste mostra que o *estado* codifica a geometria, não de onde vem a localidade; (2) a matéria é livre, ainda sem as 3 forças; (3) o espaço emergente é euclidiano, sem assinatura lorentziana. Cada ponto virou um teste `skip` com o próximo passo.
 
 ## Próximos passos
@@ -190,10 +223,11 @@ Veredito: **P1, P2 e P3 confirmadas em N = 8.** Informação mútua média por d
 - [x] H2: SU(2) em 1+1D com férmions (v0.7)
 - [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
-- [ ] H2: localidade emergente do espectro (Cotler et al. 2019)
+- [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
+- [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
+- [x] H2: Hamiltoniano de emaranhamento geométrico + primeira lei (v0.9)
+- [ ] H2: passo holográfico → Einstein linearizado (rede tensorial HaPPY/MERA)
 - [ ] Ponte H1↔H2: a entropia de área S = A/(4G) usa o mesmo G induzido (Jacobson 1994; Susskind-Uglum 1994)
-- [ ] H2: primeira lei do emaranhamento → Einstein linearizado (Faulkner et al. 2014)
-- [ ] H2: assinatura lorentziana e cone de luz (Lieb-Robinson)
 - [ ] Weinberg-Witten: identificar formalmente qual hipótese é violada (T0)
 - [ ] Ação efetiva quadrática em h_ab: gráviton sem massa, 2 polarizações, c_g = c (T1/T2)
 - [ ] T3: coeficientes de R² e Weyl² fixados pelo Modelo Padrão (a_2) e desvios de Newton em curtas distâncias
@@ -211,6 +245,11 @@ Veredito: **P1, P2 e P3 confirmadas em N = 8.** Informação mútua média por d
 - D. Page, W. Wootters, Phys. Rev. D 27, 2885 (1983)
 - P. Calabrese, J. Cardy, J. Stat. Mech. P06002 (2004), arXiv:hep-th/0405152
 - T. Jacobson, *Black hole entropy and induced gravity*, arXiv:gr-qc/9404039
+- J. Cotler, G. Penington, D. Ranard, *Locality from the spectrum*, Commun. Math. Phys. 368, 1267 (2019), arXiv:1702.06142
+- E. H. Lieb, D. W. Robinson, *The finite group velocity of quantum spin systems*, Commun. Math. Phys. 28, 251 (1972)
+- J. J. Bisognano, E. H. Wichmann, J. Math. Phys. 16, 985 (1975); 17, 303 (1976)
+- V. Eisler, I. Peschel, *Analytical results for the entanglement Hamiltonian of a free-fermion chain*, J. Phys. A 50, 284003 (2017), arXiv:1703.08126
+- T. Jacobson, *Entanglement equilibrium and the Einstein equation*, PRL 116, 201101 (2016), arXiv:1505.04753
 - E. Fradkin, S. Shenker, *Phase diagrams of lattice gauge theories with Higgs fields*, Phys. Rev. D 19, 3682 (1979)
 - A. Kitaev, *Fault-tolerant quantum computation by anyons* (código tórico), arXiv:quant-ph/9707021
 - J. Schwinger, *Gauge invariance and mass II*, Phys. Rev. 128, 2425 (1962); J. Kogut, L. Susskind, Phys. Rev. D 11, 395 (1975)

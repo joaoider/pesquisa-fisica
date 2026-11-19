@@ -76,7 +76,7 @@ def test_estado_produto_nao_define_geometria():
         emergent_distances(np.zeros((5, 5)))
 
 
-@pytest.mark.skip(reason="Pendente: fazer a LOCALIDADE emergir também (Hamiltoniano sem rede prévia; "
-                         "ex.: Cotler et al. 2019, 'Locality from the spectrum').")
+@pytest.mark.skip(reason="Coberto em test_h2_t0_localidade_do_espectro.py (v0.9): caso invariante por "
+                         "translação passou; caso desordenado inconclusivo.")
 def test_localidade_emergente_do_espectro():
     ...

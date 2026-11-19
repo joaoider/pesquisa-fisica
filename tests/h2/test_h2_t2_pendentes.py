@@ -7,15 +7,3 @@ import pytest
                          "Vetores de gauge têm termo de contato (Kabat 1995) que é o análogo do κ = -2/3.")
 def test_entropia_de_area_usa_o_mesmo_G_induzido():
     ...
-
-
-@pytest.mark.skip(reason="Pendente: primeira lei do emaranhamento → equações de Einstein linearizadas "
-                         "(Faulkner, Guica, Hartman, Myers, Van Raamsdonk 2014), num modelo holográfico de brinquedo.")
-def test_einstein_linearizado_do_emaranhamento():
-    ...
-
-
-@pytest.mark.skip(reason="Pendente: assinatura lorentziana — de onde vem o sinal (-,+,+,+)? Combinar Page-Wootters "
-                         "com o espaço emergente e testar causalidade (cone de luz de Lieb-Robinson).")
-def test_assinatura_lorentziana_e_cone_de_luz():
-    ...
