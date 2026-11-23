@@ -293,6 +293,40 @@ Arquivos: `src/pesquisa_fisica/emergence/discriminant.py`, `tests/h2/test_h2_t1_
 
 **Limites:** redes pequenas (10 células no U(1), 8 sítios no SU(2)); só 1+1D; taxas medidas a d ≤ 6. **Próximo:** cadeias longas (DMRG) para medir a razão assintótica das taxas e testar a predição de 2 do contínuo.
 
+## Cadeia longa: razão assintótica das taxas (v0.14) — previsão de 2 FALSIFICADA
+
+**Pergunta.** Comparando Schwinger sem massa e férmion livre com o **mesmo gap**, a informação mútua (IM) do gauge decai mais rápido. A previsão pré-registrada (bosonização: mésons × férmions) era que a razão das taxas assintóticas tende a **2 ± 0,2** no contínuo.
+
+**Método.** O Schwinger (Kogut-Susskind, Gauss eliminado) foi resolvido por DMRG (TeNPy, MPO de dimensão 5, χ ≤ 140) até **N = 96**, em `emergence/schwinger_dmrg.py`. O férmion livre staggered foi resolvido exatamente (gaussiano), com a massa casada pelo gap. Foram medidas três quantidades:
+- a correlação **carregada** ⟨c†ᵢ cⱼ⟩, com string de Jordan-Wigner;
+- a correlação de **densidade** ⟨QᵢQⱼ⟩_c;
+- a IM entre dois sítios, nas partições fermiônica e de spin.
+
+As taxas vêm de um ajuste `A d^(−α) e^(−κd)` (o ajuste exponencial puro superestimava a taxa livre em até 30%). A referência livre usa a taxa exata κ = 2·asinh(m/2).
+
+**Validação.** O MPO reproduz a diagonalização exata (energia e gap, com erro abaixo de 1e-7). Com J = 0, o DMRG coincide com a solução gaussiana até 1e-11.
+
+| J | gap (N=96) | κ_IM gauge / gap | κ_IM livre / gap | **razão** |
+|---|---|---|---|---|
+| 1,0 | 1,570 | 0,716 | 0,488 | **1,46** |
+| 0,5 | 1,017 | 0,736 | 0,494 | **1,48** |
+| 0,25 | 0,676 | 0,750 | 0,495 | **1,50** |
+| 0,1 | 0,406 | 0,771 | 0,493 | **1,53** |
+
+A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0, fica em ≈ **1,55–1,6**, fora de 2 ± 0,2.
+
+| Previsão | Resultado |
+|---|---|
+| Razão gauge/livre → 2 no contínuo | **Falhou.** Converge a ≈ 1,5–1,6 |
+| P1: no gauge, a correlação carregada decai mais rápido que a de densidade (tensão de corda) | **Falhou.** κ_D/κ_C ≈ 1,4: a carregada decai *mais devagar* |
+| P2: no livre, κ_D = 2κ_C (Wick) | **Passou.** 2,00 |
+
+**Leitura.**
+- A premissa errada era que a IM do gauge seria dominada pela densidade de mésons. Ela é dominada pela correlação carregada ao quadrado, como no caso livre, mas essa correlação decai a ≈ 0,75·gap/v em vez de 0,5·gap/v.
+- Em **m = 0 o Schwinger blinda cargas** (não confina): não há tensão de corda acelerando o decaimento carregado. Isso explica a falha de P1.
+- O efeito robusto continua de pé: o gauge torna o emaranhamento ~1,5× mais local que um férmion livre de mesmo gap. O fator, porém, não é o 2 da bosonização ingênua.
+- **Próximo teste natural:** m ≠ 0, onde há confinamento linear (σ ∝ m·g). Lá, P1 deveria passar.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -307,7 +341,8 @@ Arquivos: `src/pesquisa_fisica/emergence/discriminant.py`, `tests/h2/test_h2_t1_
 - [x] H2: SU(2) em 1+1D com férmions (v0.7)
 - [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
 - [x] H2: teste discriminante — mesmo gap, com e sem gauge (v0.13): H0 rejeitada em U(1) e SU(2)
-- [ ] H2: razão assintótica das taxas (gauge/livre, mesmo gap) em cadeias longas via DMRG — predição do contínuo: 2
+- [x] H2: razão assintótica das taxas em cadeias longas via DMRG (v0.14) — **≈1,5, não 2: previsão falsificada**
+- [ ] H2: mesma medição com m ≠ 0 (regime confinante, σ ∝ m·g): a correlação carregada passa a decair mais rápido?
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
