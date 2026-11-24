@@ -619,6 +619,36 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 
 **Para H2.** O papel específico do gauge no espaço emergente, dinamicamente, é **quantitativo e ligado ao alcance da interação**, não qualitativo. O próximo teste natural varia o alcance de um potencial linear truncado em R. Se a I₃ e a supressão de pares crescerem com R até o valor do gauge, a assinatura é "potencial confinante de longo alcance", e o gauge é o caso em que esse potencial vem de graça pela lei de Gauss.
 
+## Potencial linear truncado, sem gauge (v0.24): cada efeito vive na escala do observável
+
+**Identidade.** Com carga total zero, J Σₙ Lₙ² = −(J/2) Σ_{k,l} Q_k Q_l |k−l|: a energia elétrica do Schwinger é **exatamente** um potencial linear entre cargas (verificado com diferença 0,0 na matriz, N = 20).
+
+**Família sem gauge.** H_R = hopping + massa − (J/2) Σ Q_k Q_l · min(|k−l|, R).
+- R = 1 é só um termo local; R = 2 é uma interação de vizinhos; R ≥ N−1 é o Schwinger.
+- Para R = 2, 3, 5, 8, 19, ajustei m para o **mesmo gap** do gauge e repeti o quench exato (N = 20) na álgebra invariante.
+
+| R | I₃ médio t ∈ [3,6], m = 0, J = 1 | I₃ médio, m = 0,5, J = 2 | I_inv(L:R) t = 6, m = 0,5, J = 2 |
+|---|---|---|---|
+| 2 | −0,011 | −0,008 | 0,62 |
+| 3 | −0,011 | −0,014 | 0,20 |
+| 5 | −0,038 | −0,047 | 0,22 |
+| 8 | −0,066 | −0,054 | 0,46 |
+| 19 (= gauge) | −0,067 | −0,038 | **0,0035** |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P0: H_{N−1} = Schwinger | **Passou** (exato) |
+| P1: \|I₃\| cresce monotonicamente com R | **Falhou** no caso confinante: R = 5 e 8 *passam* do valor do gauge |
+| P2: pares longos decrescem monotonicamente com R | **Falhou.** Não são monótonos, e só o alcance **completo** os suprime (≥ 20× abaixo de qualquer R < 19) |
+| P3: R = 8 atinge ≥ 80% da \|I₃\| do gauge | **Passou** (97% e 143%) |
+
+**Leitura: cada efeito é controlado pelo potencial até a escala do próprio observável.**
+- **I₃** mede correlação entre três blocos que somam 6 sítios. Ela satura assim que o potencial cobre essa escala (R ≳ 5–8). Correlação multipartida local precisa de interação que alcance o tamanho da região, e não mais que isso.
+- **Os pares longos** entre L e R (separados por 8 sítios) só são suprimidos quando o potencial continua crescendo além dessa separação. Um potencial truncado é como uma corda que se rompe no comprimento R: os pares escapam assim que a distância passa de R.
+- A lei de Gauss em 1+1D impõe o alcance **completo** de graça. Por isso só o gauge tem os dois efeitos em todas as escalas.
+
+**Para H2.** A assinatura dinâmica do gauge no espaço emergente é a de um **potencial confinante cujo alcance não tem corte**. Em escalas menores que R, qualquer potencial linear truncado faz o mesmo; em escalas maiores, só o gauge. Fica a pergunta para 2+1D e 3+1D, onde a lei de Gauss dá Coulomb (log ou 1/r) e não linear: o confinamento passa a depender da dinâmica não abeliana.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -643,7 +673,8 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 - [x] H2: razão gauge/livre da v0.14 na álgebra invariante (v0.21) — ≈ 1,0: o fator 1,5 era artefato
 - [x] H2: confinamento na dinâmica na álgebra invariante (v0.22) — efeito real; I₃ < 0 é assinatura específica do gauge (livre: I₃ ≈ 0)
 - [x] H2: controle com interação local (v0.23) — sinal de I₃ não é exclusivo do gauge; magnitude 4–100× maior é; pares longos suprimidos 13–53× além da interação local
-- [ ] H2: potencial linear TRUNCADO em alcance R (sem gauge): a I₃ e a supressão de pares crescem com R até o valor do gauge?
+- [x] H2: potencial linear truncado em R (v0.24) — I₃ satura em R ≳ escala do bloco; supressão de pares exige alcance completo (Gauss)
+- [ ] H2: lei de escala — supressão de pares em função de R/d (d = separação L–R) para vários d; o colapso numa curva confirmaria o quadro de 'corda que se rompe em R'
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo

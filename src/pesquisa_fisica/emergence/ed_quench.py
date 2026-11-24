@@ -131,3 +131,16 @@ def evolve_H(H, basis, N: int, times):
         full[basis] = v
         out.append(full)
     return out
+
+
+def truncated_linear_hamiltonian(N: int, w: float = 1.0, m: float = 0.0, J: float = 1.0, R: int = 1):
+    """H_R = hopping + (m/2)Σ(−1)ⁿσᶻ − (J/2) Σ_{k,l} Q_k Q_l min(|k−l|, R), sem campo de gauge.
+    Identidade (Q_tot = 0): J Σ_n L_n² = −(J/2) Σ Q_k Q_l |k−l| ⇒ R ≥ N−1 reproduz o Schwinger."""
+    from scipy.sparse import diags
+    H0, basis = local_interaction_hamiltonian(N, w, m, 0.0)
+    bits = ((basis[:, None] >> np.arange(N)) & 1).astype(float)
+    Q = bits - (np.arange(N) % 2)
+    k = np.arange(N)
+    W = np.minimum(np.abs(k[:, None] - k[None, :]), R).astype(float)
+    pot = -0.5 * J * np.einsum("si,ij,sj->s", Q, W, Q)
+    return (H0 + diags(pot)).tocsr(), basis
