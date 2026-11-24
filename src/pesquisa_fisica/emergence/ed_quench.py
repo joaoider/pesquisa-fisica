@@ -90,3 +90,44 @@ def arrival_time(times, I, thr):
         return float("nan")
     k = k[0]
     return float(times[k - 1] + (thr - I[k - 1]) / (I[k] - I[k - 1]) * (times[k] - times[k - 1]))
+
+
+# ---------------------------------------------------------------- controle: interação LOCAL sem campo de gauge
+
+def local_interaction_hamiltonian(N: int, w: float = 1.0, m: float = 0.0, V: float = 0.0):
+    """H_V = w Σ(σ⁺σ⁻ + h.c.) + (m/2) Σ (−1)^n σᶻ_n + V Σ n_i n_{i+1}  (Thirring/XXZ massivo na rede)."""
+    from scipy.sparse import coo_matrix
+    from .schwinger import sector_basis
+
+    basis = sector_basis(N)
+    index = {int(s): i for i, s in enumerate(basis)}
+    bits = ((basis[:, None] >> np.arange(N)) & 1).astype(float)
+    sz = 2 * bits - 1
+    stag = (-1.0) ** np.arange(N)
+    diag = 0.5 * m * (sz * stag).sum(1) + V * (bits[:, :-1] * bits[:, 1:]).sum(1)
+    rows, cols, vals = list(range(len(basis))), list(range(len(basis))), list(diag)
+    for i, s in enumerate(basis):
+        s = int(s)
+        for n in range(N - 1):
+            if ((s >> n) & 1) != ((s >> (n + 1)) & 1):
+                rows.append(i); cols.append(index[s ^ ((1 << n) | (1 << (n + 1)))]); vals.append(w)
+    return coo_matrix((vals, (rows, cols)), shape=(len(basis),) * 2).tocsr(), basis
+
+
+def gap_of(H) -> float:
+    e = np.sort(eigsh(H, k=2, which="SA", tol=1e-10)[0])
+    return float(e[1] - e[0])
+
+
+def evolve_H(H, basis, N: int, times):
+    v = np.zeros(len(basis), complex)
+    v[np.searchsorted(basis, bare_vacuum_index(N))] = 1.0
+    out, t_now = [], 0.0
+    for t in times:
+        if t > t_now:
+            v = expm_multiply(-1j * (t - t_now) * H, v)
+            t_now = t
+        full = np.zeros(1 << N, complex)
+        full[basis] = v
+        out.append(full)
+    return out

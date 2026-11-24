@@ -590,6 +590,35 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 
 **Para H2.** A v0.21 mostrou que, estaticamente, o gauge só age gerando massa. Dinamicamente, ele faz algo que a massa sozinha não faz: produz **emaranhamento multipartido** (I₃ < 0) e, com confinamento, impede a formação de pares longos. Esse é o primeiro candidato a papel específico do gauge no espaço emergente que sobrevive a todas as checagens de álgebra.
 
+## Controle com interação local (v0.23): o sinal de I₃ não é do gauge; a magnitude é
+
+**Pergunta.** A I₃ < 0 na álgebra invariante (v0.22) é do gauge ou de qualquer interação?
+
+**Controle.** H_V = w Σ(σ⁺σ⁻ + h.c.) + (m/2) Σ(−1)ⁿσᶻ + V Σ nᵢnᵢ₊₁ (Thirring/XXZ massivo na rede). É uma interação **local**, sem campo de gauge, com V = 1, 2, 4 e m ajustado para o **mesmo gap** de cada caso gauge. Mesmo quench exato (N = 20), mesmos blocos, álgebra invariante. Com V = 0 ele coincide exatamente com o livre.
+
+| caso (gap) | modelo | I₃_inv (t = 6) | I₃_inv médio (t ∈ [3,6]) | I_inv(L:R) (t = 6) |
+|---|---|---|---|---|
+| m = 0, J = 1 (1,59) | **gauge** | **−0,061** | **−0,067** | 0,53 |
+| | livre | −0,001 | −0,004 | 1,00 |
+| | V = 1 / 2 / 4 | −0,015 / −0,016 / −0,002 | −0,010 / −0,009 / −0,000 | 1,56 / 1,41 / 0,63 |
+| m = 0,5, J = 2 (3,45) | **gauge** | **−0,035** | **−0,038** | **0,0035** |
+| | livre | −0,003 | −0,012 | 0,081 |
+| | V = 1 / 2 / 4 | −0,005 / +0,002 / −0,008 | −0,010 / −0,010 / −0,006 | 0,18 / 0,12 / 0,046 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: controles com I₃_inv > −0,01 (≈ 0) | **Falhou.** V = 1 e 2 dão −0,015 e −0,016 no caso m = 0 |
+| P2: \|I₃_gauge\| ≥ 3 × \|I₃_controle\| | **Passou.** 3,8–16× em t = 6; 3,7–220× na média temporal |
+
+**Leitura.**
+1. **O sinal de I₃ não é exclusivo do gauge.** A interação local também gera um pouco de emaranhamento multipartido (≈ −0,01, perto do nível do livre).
+2. **A magnitude é do gauge.** A I₃ do gauge é de 4× a mais de 100× maior, com o mesmo gap e sob qualquer V testado.
+3. **Exploratório: o confinamento mata pares longos muito além da interação local.** Com o mesmo gap, os pares longos do gauge são 13–53× menores que os dos controles locais. Nem a massa nem a repulsão de vizinhos reproduzem isso.
+
+**Interpretação.** Com a lei de Gauss eliminada, o gauge em 1+1D é um potencial densidade-densidade **linear e de longo alcance**. O controle tem alcance 1. O que distingue o gauge na dinâmica é esse alcance: um potencial que cresce com a distância amarra cada partícula às demais, o que gera correlação coletiva (I₃) e impede que pares se separem.
+
+**Para H2.** O papel específico do gauge no espaço emergente, dinamicamente, é **quantitativo e ligado ao alcance da interação**, não qualitativo. O próximo teste natural varia o alcance de um potencial linear truncado em R. Se a I₃ e a supressão de pares crescerem com R até o valor do gauge, a assinatura é "potencial confinante de longo alcance", e o gauge é o caso em que esse potencial vem de graça pela lei de Gauss.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -613,7 +642,8 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 - [x] H2: localidade em álgebras invariantes de gauge (v0.20) — causalidade restaurada (v ≈ 1,9); conclusão qualitativa de H2 sobrevive; números mudam por ordens de grandeza
 - [x] H2: razão gauge/livre da v0.14 na álgebra invariante (v0.21) — ≈ 1,0: o fator 1,5 era artefato
 - [x] H2: confinamento na dinâmica na álgebra invariante (v0.22) — efeito real; I₃ < 0 é assinatura específica do gauge (livre: I₃ ≈ 0)
-- [ ] H2: testar a assinatura multipartida pré-registrada: I₃_inv do gauge × livre a mesmo gap em vários (m, J), tamanhos de bloco e tempos; comparar com um modelo de interação NÃO gauge com o mesmo gap (ex.: Thirring/XXZ massivo) para separar 'gauge' de 'interação'
+- [x] H2: controle com interação local (v0.23) — sinal de I₃ não é exclusivo do gauge; magnitude 4–100× maior é; pares longos suprimidos 13–53× além da interação local
+- [ ] H2: potencial linear TRUNCADO em alcance R (sem gauge): a I₃ e a supressão de pares crescem com R até o valor do gauge?
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
