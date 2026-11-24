@@ -12,10 +12,10 @@ Cada ideia é uma hipótese que precisa sobreviver a testes cada vez mais duros:
 |---|---|---|
 | **T0** Consistência interna | A matemática fecha? | `tests/test_t0_*.py`, `tests/h2/test_h2_t0_*.py` |
 | **T1** Limites conhecidos | Recupera a física estabelecida? | `tests/test_t1_*.py`, `tests/h2/test_h2_t1_*.py` |
-| **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` (H1); H2: *(nenhum ainda)* |
+| **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` (H1; validação do código de H2 contra Martinez 2016) |
 | **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (1 tentativa, v0.26, falhou) |
 
-**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 1 (só H1), T3 = 1 (falhou). H2 ainda não teve contato com dados experimentais; o próximo passo é T2 com simuladores quânticos de teorias de gauge.
+**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 2 (H1 + validação Schwinger/Martinez 2016, v0.30), T3 = 1 (falhou). O código de H2 já foi confrontado com dados de laboratório (v0.30); as afirmações específicas de H2 ainda não.
 
 Convenções nos testes:
 - **teste normal**: resultado que a ideia precisa satisfazer;
@@ -830,6 +830,35 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 1. **T2 viável agora:** reproduzir ν(t) e a negatividade de Martinez et al. (2016) com o nosso código, incluindo o modelo de erro publicado (desfase p por qubit por passo, Trotter de 4 passos). É uma **validação da ferramenta** contra dado real, não um teste de H2 em sentido forte: o próprio artigo já compara com a teoria.
 2. **T2 para H2 propriamente:** não existe ainda. Nenhum experimento publicado mediu IM ou I₃ entre regiões **na álgebra invariante** de uma teoria de gauge.
 3. **Caminho para T3:** formular a assinatura de I₃ como **protocolo mensurável**: Rényi-2, medições aleatórias com respeito à simetria, ~10–20 íons, erros realistas. Depois, verificar se ela sobrevive às imperfeições experimentais. Isso transforma o resultado da v0.23 numa predição que um laboratório pode testar.
+
+## T2 de validação (v0.30): nosso código contra o experimento de Martinez et al. (2016)
+
+**O que é.** O primeiro contato do código de H2 com dados de laboratório. Martinez et al. (*Nature* 534, 516, 2016) simularam **o nosso Hamiltoniano** de Schwinger num computador de 4 íons (J = w, m = 0,5w, ε₀ = 0), a partir do vácuo nu. Mediram a densidade de partículas ν(t) e a negatividade logarítmica E_N entre as metades.
+
+**Protocolo.**
+1. A previsão ideal foi calculada e **commitada antes de ler as figuras** (commit 3339280) e pré-registrada no Notion.
+2. Os dados foram **digitalizados das figuras vetoriais (SVG)** do ar5iv. As coordenadas exatas de cada elemento vieram do próprio SVG, o ponto experimental é o centro da barra de erro, e a calibração usa as marcas dos eixos. A curva ideal do artigo começa exatamente em (0, 0), o que confirma a calibração.
+3. A convenção de E_N (log₂) foi identificada pelo primeiro passo, onde a descoerência é mínima: medido 0,73, ideal 0,79 em log₂ (0,55 em ln).
+
+| wt | ν ideal (nosso) | ν medido | Δ | E_N ideal | E_N medido |
+|---|---|---|---|---|---|
+| π/8 | 0,194 | 0,184 ± 0,005 | −0,011 | 0,79 | 0,73 ± 0,03 |
+| π/4 | 0,449 | 0,439 ± 0,008 | −0,010 | 1,25 | 0,99 ± 0,05 |
+| 3π/8 | 0,370 | 0,447 ± 0,008 | **+0,077** | 1,45 | 0,89 ± 0,04 |
+| π/2 | 0,163 | 0,337 ± 0,008 | **+0,173** | 1,14 | 0,66 ± 0,04 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: nossa curva ideal = curva ideal do artigo (\|Δν\| ≤ 0,03) | **Passou** (máx. 0,0003 ao longo da curva) |
+| P2: dados a \|Δν\| ≤ 0,07 da curva **ideal** | **Falhou** nos dois últimos passos (+0,077; +0,173) |
+| P3: E_N medido > 0 e ≤ ideal + 0,1 | **Passou** (a descoerência só reduz o emaranhamento) |
+
+**Exploratório (não pré-registrado): por que P2 falhou.** O experimento não implementa a evolução contínua. Ele usa **4 passos de Trotter** de π/8 e sofre **desfase**. Com a ordem Z · (pares) · (ímpares), nosso código reproduz **exatamente** os pontos de "erro de discretização" do artigo: 0,1982 / 0,4716 / 0,4235 / 0,2252. Somando o desfase publicado (p = 0,038 por qubit por passo), reproduz exatamente o "modelo de erro" deles: 0,1982 / 0,448 / 0,4333 / 0,3116. O erro quadrático médio contra os dados cai de **0,105 (ideal) para 0,015 (Trotter + desfase)**.
+
+**Leitura.**
+- O código de H2 está **validado contra dado real**: a física ideal coincide com a do artigo a 3·10⁻⁴, e o pipeline de erros reproduz o deles exatamente.
+- A falha de P2 é **de protocolo, não de física**: o pré-registro comparou com a evolução ideal, mas o experimento implementa uma versão discretizada e ruidosa. Lição para os próximos T2/T3: pré-registrar **com o protocolo experimental** (passos de Trotter, ruído), não com a idealização.
+- Isso **não** testa as afirmações específicas de H2 (álgebra invariante, I₃), porque nenhum experimento mediu essas grandezas. Mas dá base para o próximo passo: propor a medida de I₃ como predição T3 com protocolo realista.
 
 ## Próximos passos
 
