@@ -363,6 +363,36 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - O correlador estático do vácuo **não enxerga a corda**: com matéria dinâmica, flutuações de pares quebram a corda virtual logo de cara (lei de perímetro), e o decaimento longo fica com os mésons.
 - A confinamento aparece na **dinâmica**: supressão do cone de luz após um quench (Kormos et al., Nat. Phys. 2017), ou laços de Wilson com cargas externas estáticas. É esse o teste certo para a corda.
 
+## Confinamento na dinâmica (v0.16): quench global e o cone de luz do espaço emergente
+
+**Pergunta.** A v0.15 mostrou que o vácuo estático não enxerga a corda. Ela aparece quando o sistema é tirado do equilíbrio? E o efeito separa confinamento (m > 0) de blindagem (m = 0)?
+
+**Protocolo.**
+- Estado inicial: vácuo nu staggered (sem pares, sem fluxo).
+- Evolução: TDVP de dois sítios (TeNPy) com H(m, J), N = 24, t ≤ 6, χ = 96.
+- Referência: férmion livre exato com o **mesmo gap**.
+- Observáveis: entropia de meia cadeia S(t) e IM de dois sítios I(c, c+d; t).
+- Validação: o TDVP reproduz a dinâmica livre exata (erro < 1e-3). χ = 96 e χ = 160 dão razões iguais (diferença < 0,01).
+
+| m | J | S_gauge/S_livre (t = 6) | alcance da frente de IM (sítios; livre ≥ 16) |
+|---|---|---|---|
+| 0 | 0,5 | **0,98** | 10 |
+| 0 | 1 | **0,87** | 9 |
+| 0,5 | 0,5 | **0,83** | 12 |
+| 0,5 | 1 | **0,66** | 9 |
+| 0,5 | 2 | **0,43** | 7 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: m > 0 ⇒ razão < 0,5 e caindo com J | **Falhou como enunciado.** Cai com J (0,83 → 0,66 → 0,43), mas só J = 2 fica abaixo de 0,5 |
+| P2: m = 0 (blindagem) ⇒ razão > 0,7 | **Passou.** 0,98 e 0,87. Com J fixo, ligar m reduz a razão (0,87 → 0,66; 0,98 → 0,83) |
+| P3: frente de IM do gauge com velocidade < 0,6 da livre | **Falhou.** A frente não tem velocidade constante: arranca e **trava**. Trava também em m = 0, com o mesmo alcance de m = 0,5 em J = 1 |
+
+**Leitura.**
+- A corda aparece na dinâmica, como esperado da literatura (Kormos et al. 2017; Magnifico et al. 2020): a J fixo, a massa freia o crescimento do emaranhamento em larga escala (S de meia cadeia). Isso separa confinamento de blindagem, coisa que o vácuo estático não fazia.
+- A trava da **IM de dois sítios** é outra coisa. Ela depende de J e não de m, então vem da interação gauge em si, e não da corda.
+- No espaço emergente, o gauge "fecha" o cone de luz da geometria local (pares de sítios) mesmo sem confinamento. A corda age sobre o emaranhamento de longa escala.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -379,7 +409,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: teste discriminante — mesmo gap, com e sem gauge (v0.13): H0 rejeitada em U(1) e SU(2)
 - [x] H2: razão assintótica das taxas em cadeias longas via DMRG (v0.14) — **≈1,5, não 2: previsão falsificada**
 - [x] H2: regime confinante m ≠ 0 (v0.15) — sem assinatura de corda no vácuo; razão = f(m/g), de 1,5 a 1
-- [ ] H2: confinamento na DINÂMICA — quench no Schwinger massivo (TDVP): o cone de luz do emaranhamento é suprimido pela corda?
+- [x] H2: confinamento na dinâmica (v0.16) — S(t) separa confinamento de blindagem; a trava da IM local vem da interação gauge (também em m = 0)
+- [ ] H2: por que a IM de dois sítios trava em m = 0? Testar se o emaranhamento migra para correlações multipartidas (IM de blocos, informação tripartida I₃)
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
