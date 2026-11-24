@@ -775,6 +775,35 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 
 **Limites.** Z₂ (discreto, sem fótons) e rede 4×4. A comparação quantitativa com −6 por vetor exige um campo com fótons (U(1)) e o limite do contínuo.
 
+## Ponte: Z_N → U(1) em 2+1D (v0.29) — a borda continua dominando; o regime de fótons está fora do alcance exato
+
+**Pergunta.** Na v0.28, para Z₂, 98–99,98% do emaranhamento ficou na borda (centro elétrico). Com fótons (U(1)), as polarizações transversais deveriam dar emaranhamento destilável de bulk. A fração destilável cresce quando Z_N se aproxima de U(1)?
+
+**Método.**
+- Gauge Z_N pura numa rede aberta de 3×3 plaquetes (24 elos), com H = (h/2) Σ E² − K Σ (Uₚ + Uₚ†)/2, h = 0,5 e K = 1.
+- Dual exato em alturas nₚ ∈ Z_N, com E = n_esq − n_dir. Lei de Gauss sem nenhuma violação; N = 2 reproduz o Z₂ exatamente.
+- N = 2..5 (até 1,95 milhão de estados). Hilbert estendido, S_ext = H_borda + S_dest, para todos os retângulos com MDR tratável.
+
+| N | ⟨S_dest/S_ext⟩ | máx | R² (lei de perímetro de H_borda) | ⟨E²⟩ | P(\|E\| = N/2) |
+|---|---|---|---|---|---|
+| 2 | 0,00008 | 0,002 | 0,974 | — | — |
+| 3 | 0,00011 | 0,003 | 0,973 | 0,54 | 0,62 |
+| 4 | 0,00091 | 0,021 | 0,959 | 0,42 | 0,042 |
+| 5 | 0,00102 | 0,019 | 0,926 | 0,37 | 0,031 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: fração destilável cresce monotonicamente com N | **Passou** no conjunto pré-registrado. Não é robusto: no conjunto comum de 25 regiões há inversão de N = 4 para 5 (0,00110 → 0,00102) |
+| P2: N = 2 ≤ 0,05 e N = 5 ≥ 0,15 | **Falhou.** N = 5 dá 0,001, duas ordens abaixo |
+| P3: lei de perímetro do centro (R² ≥ 0,9) | **Passou** |
+
+**Leitura.**
+- Com N = 4 ≈ 5 e P(|E| = N/2) ≈ 3%, o modelo está **quase convergido para o U(1)** nesse acoplamento. Mesmo assim, **o emaranhamento continua > 99,9% de borda**.
+- Mas este é o U(1) compacto em acoplamento intermediário (g² ≈ 0,7, ⟨E²⟩ ≈ 0,37): perto do vácuo elétrico, com fótons pouco desenvolvidos numa rede 3×3.
+- O regime de fótons (acoplamento fraco) exige ⟨E²⟩ grande, isto é, N muito maior, o que está fora do alcance da diagonalização exata.
+
+**Próximo passo correto.** Ir direto ao limite de fótons com **Maxwell não compacto na rede**, que é gaussiano e exatamente solúvel em redes grandes. Para ele, Casini e Huerta mostram como calcular a entropia com centro elétrico, e o resultado pode ser comparado com o termo de contato de Kabat (−6 por vetor, v0.12) e com o modo de borda de Donnelly-Wall.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -805,7 +834,8 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 - [ ] H2: isolar o efeito par/ímpar em R (células staggered)
 - [x] H2: 2+1D, gauge Z₂ pura (v0.27) — cordas elétricas contaminam a IM full no confinado; a álgebra inv reconstrói 2D em todas as fases
 - [x] Ponte: centro elétrico em 2+1D, Z₂ (v0.28) — borda carrega 98–99,98% do emaranhamento; lei de perímetro; γ ≈ ln 2
-- [ ] Ponte: Z_N com N crescente (rumo a U(1) com fótons) — a fração destilável (bulk de fótons) cresce com N? Comparar a razão borda/bulk com a de Kabat/Donnelly-Wall para Maxwell
+- [x] Ponte: Z_N → U(1) (v0.29) — borda > 99,9% até N=5 (quase U(1), acoplamento intermediário); regime de fótons fora do alcance exato
+- [ ] Ponte: Maxwell NÃO compacto na rede (gaussiano), 2+1D e 3+1D — entropia com centro elétrico em redes grandes; separar borda (Shannon dos fluxos) e bulk; comparar com Kabat (−6 por vetor) e Donnelly-Wall
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
