@@ -557,6 +557,39 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - Sobrevive a versão fraca: o acoplamento gauge gera massa, e a massa localiza o emaranhamento. Isso é genérico, e qualquer teoria com gap faz o mesmo.
 - O papel específico do gauge no espaço emergente tem de ser procurado em outro lugar: no termo de contato e no centro elétrico (v0.11–v0.12), na dinâmica confinante (v0.16) ou na estrutura de lei de área (v0.18).
 
+## Confinamento na dinâmica na álgebra invariante (v0.22): o efeito é real, e o gauge deixa uma assinatura multipartida
+
+**Pergunta.** Depois da v0.21 (no vácuo, a mesmo gap, gauge = livre na álgebra invariante), os efeitos dinâmicos do confinamento das v0.16–v0.18 também eram artefato de partição?
+
+**Teorema (P0).** O estado tem carga total definida. Então, para **uma região só**, ρ_R comuta com Q_R, e S_inv(R) = S_qubit(R). Verificado numericamente com diferença < 1e-14. Consequência: a supressão de S(t) pelo confinamento (v0.16) e a lei de área de S(ℓ) (v0.18) **sobrevivem automaticamente**. Só as quantidades com regiões disjuntas precisavam ser refeitas.
+
+**Método.** Quench exato (N = 20), t ≤ 6, com gauge e livre de mesmo gap. Medidas:
+- I(L:R) entre as regiões externas a um bloco central de 8 sítios;
+- I₃ de três blocos adjacentes de 2 sítios.
+
+As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre elas. A diagonalização é feita bloco a bloco por setor de carga.
+
+| (t = 6) | m = 0, J = 1 | m = 0,5, J = 2 |
+|---|---|---|
+| I(L:R) gauge/livre, qubit | 0,34 | 0,010 |
+| I(L:R) gauge/livre, **inv** | **0,53** | **0,043** |
+| I₃ qubit (gauge; livre) | −0,115; −0,150 | −0,096; −0,081 |
+| I₃ **inv** (gauge; livre) | **−0,061; −0,001** | **−0,035; −0,003** |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P0: entropia de região única idêntica nas duas álgebras | **Passou** (< 1e-14) |
+| P1: m = 0, razão de I(L:R) maior em inv (pares do livre são férmions carregados; os do gauge, mésons neutros) | **Passou** (0,34 → 0,53) |
+| P2: m = 0,5, J = 2, razão inv < 0,3 | **Passou** (0,043) |
+| P3: m = 0,5, J = 2, I₃ inv do gauge negativa e abaixo da do livre | **Passou** |
+
+**Leitura.**
+1. **O efeito dinâmico do confinamento é real.** Ele aparece em quantidades de região única, que não dependem da álgebra, e sobrevive na álgebra invariante para regiões disjuntas: os pares longos caem a ~4% do livre.
+2. **A álgebra invariante separa o que é carregado do que é neutro.** Os pares de quasipartículas do livre são férmions; metade da I(L:R) do livre desaparece ao proibir linhas de Wilson (1,91 → 1,00). Os mésons do gauge são neutros e perdem menos (0,64 → 0,53).
+3. **Achado exploratório (não pré-registrado para m = 0): a assinatura multipartida é específica do gauge.** Na álgebra invariante, a I₃ do livre é ≈ 0, exatamente o quadro de pares de quasipartículas (emaranhamento só bipartido). A do gauge é claramente negativa, com e sem confinamento. Na álgebra de qubits, essa distinção ficava escondida (as duas eram negativas).
+
+**Para H2.** A v0.21 mostrou que, estaticamente, o gauge só age gerando massa. Dinamicamente, ele faz algo que a massa sozinha não faz: produz **emaranhamento multipartido** (I₃ < 0) e, com confinamento, impede a formação de pares longos. Esse é o primeiro candidato a papel específico do gauge no espaço emergente que sobrevive a todas as checagens de álgebra.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -579,7 +612,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: coarse-graining em escala de méson (v0.19) — sem cone balístico na IM total (picos simultâneos, artefato de corda); nas cargas, o cone é causal e igual ao livre em m = 0
 - [x] H2: localidade em álgebras invariantes de gauge (v0.20) — causalidade restaurada (v ≈ 1,9); conclusão qualitativa de H2 sobrevive; números mudam por ordens de grandeza
 - [x] H2: razão gauge/livre da v0.14 na álgebra invariante (v0.21) — ≈ 1,0: o fator 1,5 era artefato
-- [ ] H2: refazer v0.16–v0.18 (quench: lei de área × blindagem) na álgebra invariante — quais efeitos dinâmicos do confinamento sobrevivem?
+- [x] H2: confinamento na dinâmica na álgebra invariante (v0.22) — efeito real; I₃ < 0 é assinatura específica do gauge (livre: I₃ ≈ 0)
+- [ ] H2: testar a assinatura multipartida pré-registrada: I₃_inv do gauge × livre a mesmo gap em vários (m, J), tamanhos de bloco e tempos; comparar com um modelo de interação NÃO gauge com o mesmo gap (ex.: Thirring/XXZ massivo) para separar 'gauge' de 'interação'
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo

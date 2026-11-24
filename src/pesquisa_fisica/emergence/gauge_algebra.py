@@ -40,13 +40,22 @@ def algebra_entropy(full: np.ndarray, N: int, regions, classical_sets=(), mode: 
         return _H((np.abs(X) ** 2).sum(axis=1))
     if mode == "qubit":
         return _H(np.linalg.eigvalsh(X @ X.conj().T))
-    off, mask = 0, np.ones((X.shape[0],) * 2, bool)
+    off, labels = 0, np.zeros(X.shape[0], np.int64)
     for R in regions:
         q = _charge(rb[:, off:off + len(R)], R)
-        mask &= q[:, None] == q[None, :]
+        labels = labels * (2 * N + 1) + (q + N)
         off += len(R)
+    groups = [np.where(labels == L)[0] for L in np.unique(labels)]
+
+    def block_eigs(Xc):
+        out = []
+        for g in groups:                                  # ρ invariante = ⊕ setores: diagonaliza bloco a bloco
+            Y = Xc[g]
+            out.append(np.linalg.eigvalsh(Y @ Y.conj().T))
+        return np.concatenate(out)
+
     if mode == "inv":
-        return _H(np.linalg.eigvalsh((X @ X.conj().T) * mask))
+        return _H(block_eigs(X))
     if mode == "ce":
         cb = _bits(np.arange(X.shape[1]), len(rest))
         pos = {s: i for i, s in enumerate(rest)}
@@ -55,11 +64,7 @@ def algebra_entropy(full: np.ndarray, N: int, regions, classical_sets=(), mode: 
             cols = [pos[s] for s in C]
             qc = _charge(cb[:, cols], C) if C else np.zeros(X.shape[1], int)
             key = key * (2 * N + 1) + (qc + N)
-        eig = []
-        for k in np.unique(key):
-            Xc = X[:, key == k]
-            eig.append(np.linalg.eigvalsh((Xc @ Xc.conj().T) * mask))
-        return _H(np.concatenate(eig))
+        return _H(np.concatenate([block_eigs(X[:, key == k]) for k in np.unique(key)]))
     raise ValueError(mode)
 
 
@@ -110,3 +115,9 @@ def two_cell_mi(rho16: np.ndarray, cell_starts=(0, 0)) -> dict:
     diag = lambda r: _H(np.real(np.diag(r)))
     out["carga"] = diag(rA) + diag(rB) - diag(rho16)
     return out
+
+
+def algebra_I3(full, N, A, B, C, mode):
+    """I₃(A:B:C) com a álgebra conjunta gerada pelas regiões (sem linhas de Wilson entre elas)."""
+    S = lambda regs: algebra_entropy(full, N, regs, (), mode)
+    return S([A]) + S([B]) + S([C]) - S([A, B]) - S([B, C]) - S([A, C]) + S([A, B, C])
