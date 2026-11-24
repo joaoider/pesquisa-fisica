@@ -51,8 +51,8 @@ def schwinger_mpo_model(N: int, w: float = 1.0, m: float = 0.0, J: float = 1.0) 
 def ground_and_first_excited(N: int, w=1.0, m=0.0, J=1.0, chi_max: int = 120, excited: bool = True):
     M = schwinger_mpo_model(N, w, m, J)
     init = ["down" if k % 2 == 0 else "up" for k in range(N)]          # vácuo staggered: Q_k = 0, S^z_tot = 0
-    params = {"mixer": True, "max_E_err": 1e-11, "max_sweeps": 40,
-              "trunc_params": {"chi_max": chi_max, "svd_min": 1e-12}}
+    params = {"mixer": True, "max_E_err": 1e-12, "max_sweeps": 40,
+              "trunc_params": {"chi_max": chi_max, "svd_min": 1e-14}}
     psi0 = MPS.from_product_state(M.lat.mps_sites(), init, bc="finite")
     E0 = dmrg.run(psi0, M, params)["E"]
     out = {"E0": E0, "psi0": psi0}

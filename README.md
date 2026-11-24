@@ -327,6 +327,42 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - O efeito robusto continua de pé: o gauge torna o emaranhamento ~1,5× mais local que um férmion livre de mesmo gap. O fator, porém, não é o 2 da bosonização ingênua.
 - **Próximo teste natural:** m ≠ 0, onde há confinamento linear (σ ∝ m·g). Lá, P1 deveria passar.
 
+## Regime confinante (v0.15): três previsões falsificadas e uma lei de escala
+
+**Pergunta.** Na v0.14, com m = 0, o modelo gauge deixa o emaranhamento ~1,5× mais local que o férmion livre de mesmo gap. Em m = 0 o Schwinger *blinda* as cargas. Com m ≠ 0 surge a tensão de corda: o fluxo elétrico custa ≈ J por elo. Previsões pré-registradas no Notion antes de rodar:
+- **P1:** a taxa local κ_C(d) da correlação carregada cresce com a distância (corda);
+- **P2:** essa subida satura em d* ≈ gap/J (quebra de corda);
+- **P3:** a razão de IM gauge/livre sobe acima de 1,5.
+
+**Método.** DMRG com N = 64 e χ ≤ 160 (precisão SVD de 1e-14), com o mesmo casamento de gap da v0.14. Os pontos rodados foram (m, J) = (0; 0,25; 0,5; 1 | 0,5), (0,5 | 1; 2). O diagnóstico exploratório com quarks pesados (m = 1, J = 0,1 e 0,25; corda de até ~21 sítios) foi feito *depois* e não estava pré-registrado.
+
+| m | J | x = m/√J | razão IM gauge/livre | κ_C(d) |
+|---|---|---|---|---|
+| 0 | 0,5 | 0 | **1,49** | constante |
+| 0,25 | 0,5 | 0,35 | **1,36** | constante |
+| 0,5 | 2,0 | 0,35 | **1,35** | constante |
+| 0,5 | 1,0 | 0,50 | **1,33** | constante |
+| 0,5 | 0,5 | 0,71 | **1,28** | constante |
+| 1,0 | 0,5 | 1,41 | **1,20** | constante |
+| 1,0 | 0,25 | 2,0 | **1,14** | cai ~7% e satura |
+| 1,0 | 0,1 | 3,2 | **1,07** | cai ~10% e satura |
+
+| Previsão | Resultado |
+|---|---|
+| P1: κ_C(d) cresce (corda) | **Falhou.** A maior subida é < 3% em todos os pontos com m ≥ 0,5. Com quarks pesados, κ_C(d) *cai* |
+| P2: saturação em d* ≈ gap/J | **Falhou.** Não há subida para saturar |
+| P3: razão > 1,5 com m > 0 | **Falhou, com sinal oposto.** A razão *cai* de 1,49 para 1,07 |
+
+**Achado (não previsto).**
+- A razão depende de um único parâmetro, x = m/√J. No contínuo, J = g²a/2 e w = 1/(2a), então x ∝ m/g.
+- Pontos com J diferentes e o mesmo x colapsam: 1,36 contra 1,35.
+- A razão decresce monotonicamente de ≈ 1,5 (x = 0, interação puramente gauge) até 1 (quarks pesados, x → ∞, regime quase livre).
+
+**Leitura.**
+- A localidade extra do emaranhamento vem do **acoplamento relativo à massa**, não do confinamento.
+- O correlador estático do vácuo **não enxerga a corda**: com matéria dinâmica, flutuações de pares quebram a corda virtual logo de cara (lei de perímetro), e o decaimento longo fica com os mésons.
+- A confinamento aparece na **dinâmica**: supressão do cone de luz após um quench (Kormos et al., Nat. Phys. 2017), ou laços de Wilson com cargas externas estáticas. É esse o teste certo para a corda.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -342,7 +378,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: SU(3) em 1+1D (QCD 1+1D), N = 6 local e N = 8 no GitHub Actions (v0.8)
 - [x] H2: teste discriminante — mesmo gap, com e sem gauge (v0.13): H0 rejeitada em U(1) e SU(2)
 - [x] H2: razão assintótica das taxas em cadeias longas via DMRG (v0.14) — **≈1,5, não 2: previsão falsificada**
-- [ ] H2: mesma medição com m ≠ 0 (regime confinante, σ ∝ m·g): a correlação carregada passa a decair mais rápido?
+- [x] H2: regime confinante m ≠ 0 (v0.15) — sem assinatura de corda no vácuo; razão = f(m/g), de 1,5 a 1
+- [ ] H2: confinamento na DINÂMICA — quench no Schwinger massivo (TDVP): o cone de luz do emaranhamento é suprimido pela corda?
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
