@@ -452,6 +452,36 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 
 **Para H2.** O espaço emergente de um sistema confinante é estritamente local, com emaranhamento de lei de área após o quench. O de um sistema blindado mantém conectividade de longo alcance, mas só em escalas maiores que o tamanho do méson. A escala em que a geometria "se forma" é o tamanho das partículas compostas.
 
+## Coarse-graining em escala de méson (v0.19): o cone de luz só é causal nos observáveis invariantes de gauge
+
+**Pergunta.** Na v0.18, a IM entre as regiões externas mostrou pares longos em m = 0. Eles aparecem como um cone de luz balístico na IM entre blocos do tamanho de um méson?
+
+**Método.**
+- **Evolução exata** com N = 20 (setor de carga zero, 184.756 estados), sem truncamento. Validada contra a solução gaussiana (erro 1e-13).
+- Quench do vácuo nu, t ≤ 6. IM entre dois blocos de tamanho ℓ_b = 1..4, simétricos em torno do centro e separados por r = 2..8.
+- Diagnóstico extra: a IM **só de cargas** (diagonal de ρ na base σᶻ), que contém apenas observáveis locais invariantes de gauge.
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: m = 0, ℓ_b = 4 ⇒ pico balístico em todo r, com t_pico crescente | **Falhou.** Os picos são **simultâneos** (t_pico ≈ 1,6 para r = 2..8). No livre, t_pico = 2,8 → 4,0 → 4,7 → 5,05 |
+| P2: v_gauge/v_livre ∈ [0,5; 1] | **Falhou.** A frente total do gauge corre a v ≈ 3,8 (acima de 2w = 2), com chegada sublinear em r |
+| P3: m = 0,5, J = 2 ⇒ I_max(r = 8) < 0,1 · livre | **Passou** (0,022) |
+
+**Diagnóstico: a frente "rápida" é artefato de corda.**
+
+| tempo de chegada (r = 2, 4, 6, 8) | IM total | só cargas (invariante de gauge) |
+|---|---|---|
+| gauge m = 0 | 0,23, 0,58, 0,84, 1,02 | **0,40, 0,93, 1,44, 2,03** |
+| livre de mesmo gap | 0,23, 0,63, 1,12, 1,71 | **0,40, 0,96, 1,47, 2,12** |
+| gauge m = 0,5, J = 2 | 0,23, 0,52, 0,71, 0,85 | **0,41, 1,00, 2,48, 4,90** |
+| livre de mesmo gap | 0,23, 0,66, 1,17, 2,37 | 0,41, 1,02, 2,44, 3,61 |
+
+- A IM total do gauge a longa distância é quase toda **coerente**: a parte de cargas é < 5% no pico.
+- A IM total vem de operadores como σ⁺_a σ⁻_b. Com a lei de Gauss eliminada, eles carregam implicitamente a **corda de fluxo** entre os blocos. São operadores estendidos: o valor esperado deles evolui pela dinâmica local ao longo de toda a corda, sem sinal viajando. Daí os picos simultâneos e a frente acima de 2w.
+- Nos **observáveis locais invariantes de gauge** (cargas), o cone de luz é causal. Em m = 0 ele coincide com o do férmion livre (v ≈ 2). Com confinamento, é freado (r = 8 chega em t = 4,9 contra 3,6 no livre), como em Kormos et al.
+
+**Consequência metodológica para H2.** Toda a IM de teorias de gauge usada desde a v0.6 (U(1), SU(2), SU(3), v0.13–v0.18) usou partições **só de matéria com a lei de Gauss eliminada**. Essa partição mistura correlações locais com coerências de corda. É a mesma questão de "qual álgebra?" que apareceu no termo de contato de Kabat (v0.12): o emaranhamento de campos de gauge depende da escolha do centro elétrico. Os resultados qualitativos de confinamento sobrevivem (P3 e a frente freada nas cargas), mas os números de localidade precisam ser refeitos numa partição invariante de gauge.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -471,7 +501,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: confinamento na dinâmica (v0.16) — S(t) separa confinamento de blindagem; a trava da IM local vem da interação gauge (também em m = 0)
 - [x] H2: correlações multipartidas após o quench (v0.17) — blocos de 2 também travam; sem pico balístico no gauge; f cresce com confinamento
 - [x] H2: escala do emaranhamento após o quench (v0.18) — confinamento ⇒ lei de área; blindagem ⇒ pares longos via mésons
-- [ ] H2: tornar explícita a geometria emergente em escala de méson — IM entre blocos de tamanho ℓ_b ≳ tamanho do méson (coarse-graining) em m = 0, e checar se o cone de luz balístico reaparece
+- [x] H2: coarse-graining em escala de méson (v0.19) — sem cone balístico na IM total (picos simultâneos, artefato de corda); nas cargas, o cone é causal e igual ao livre em m = 0
+- [ ] H2: refazer as medidas de localidade (v0.6–v0.8, v0.13–v0.18) numa partição invariante de gauge: Hilbert estendido com elos e centro elétrico (Casini-Huerta-Rosabal), comparando com a IM só de cargas como cota inferior
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
