@@ -742,6 +742,39 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 
 **Limites.** Gauge sem matéria, rede pequena (5×4), Z₂ (não U(1)) e só o estado fundamental. O centro elétrico (fluxos de fronteira como variáveis clássicas) ainda não foi medido em 2+1D. É ali que deve aparecer o análogo de rede do termo de contato de Kabat, a ponte com G (v0.11–v0.12).
 
+## Ponte H1 ↔ H2: centro elétrico em 2+1D (v0.28) — o emaranhamento do campo de gauge é quase todo de borda
+
+**Pergunta.** Na v0.12, o termo de contato de Kabat (−6 por vetor) fechou S = A/4G com o G induzido. Na literatura (Donnelly-Wall 2016), ele é interpretado como **modos de borda** do campo de gauge. Qual é a peça correspondente na rede, e quanto ela pesa?
+
+**Método.**
+- Gauge Z₂ pura em 2+1D numa rede **aberta de 4×4 plaquetes, com todos os 40 elos** e lei de Gauss em todos os vértices.
+- Estado fundamental exato via dual: Ising com campo de borda, 65.536 estados. Ele é mapeado em laços elétricos (bijeção μᶻ ↔ configurações σˣ).
+- Para cada região A (os elos de um retângulo de plaquetes, 99 regiões), a entropia no **Hilbert estendido** se decompõe exatamente em S_ext = H_borda + S_dest:
+  - H_borda é a entropia de Shannon dos fluxos elétricos nos vértices de corte, ou seja, o **centro elétrico**;
+  - S_dest é a parte destilável.
+- Validação: em h → 0 (toric code), S_ext = (n_corte − 1)·ln 2 **exatamente**, e toda a entropia está no centro.
+
+| h | fase | fração de borda H_borda/S_ext (mín. / média) | H_borda vs n_corte: inclinação (R²) | intercepto de S_ext / ln 2 |
+|---|---|---|---|---|
+| 0,15 | desconfinada | **0,998** / 0,9998 | 0,60 (0,983) | **−0,48** |
+| 0,33 | transição | 0,979 / 0,998 | 0,39 (0,953) | −0,14 |
+| 0,8 | confinada | 0,995 / 0,9998 | 0,11 (0,952) | −0,06 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: no desconfinado, H_borda/S_ext ≥ 0,9 | **Passou** (0,998) |
+| P2: H_borda segue lei de perímetro (R² ≥ 0,95), com inclinação decrescente em h | **Passou** |
+| P3: intercepto ≈ −ln 2 no desconfinado (entropia topológica) e ≈ 0 no confinado | **Passou** (−0,48 ln 2; −0,06 ln 2) |
+
+**Achado além do previsto.** Em **todas** as fases, 98% a 99,98% do emaranhamento do campo de gauge está no centro elétrico. A parte destilável nunca passa de 0,035 nats.
+
+**Leitura para a ponte.**
+- Na rede, o que corresponde ao termo de contato (os modos de borda) não é uma correção: para um campo de gauge sem fótons propagantes (Z₂), é **praticamente todo** o emaranhamento, com lei de perímetro (área em 2+1D).
+- Isso dá suporte, no lado da rede, à leitura usada na v0.12: a contribuição de gauge à entropia de área vem da fronteira (do fluxo que atravessa a superfície), não de graus de liberdade "de bulk".
+- O peso relativo borda/bulk, porém, **não é universal**: depende de haver fótons. O Z₂ não tem polarizações transversais.
+
+**Limites.** Z₂ (discreto, sem fótons) e rede 4×4. A comparação quantitativa com −6 por vetor exige um campo com fótons (U(1)) e o limite do contínuo.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -771,7 +804,8 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 - [x] H2: ressonância de ruptura no Schwinger real (v0.26) — não existe; a da v0.25 era artefato do corte
 - [ ] H2: isolar o efeito par/ímpar em R (células staggered)
 - [x] H2: 2+1D, gauge Z₂ pura (v0.27) — cordas elétricas contaminam a IM full no confinado; a álgebra inv reconstrói 2D em todas as fases
-- [ ] H2/ponte: centro elétrico em 2+1D — entropia de bordas (fluxos de fronteira) como análogo de rede do termo de contato de Kabat; escala com o perímetro e sinal relativo ao bulk
+- [x] Ponte: centro elétrico em 2+1D, Z₂ (v0.28) — borda carrega 98–99,98% do emaranhamento; lei de perímetro; γ ≈ ln 2
+- [ ] Ponte: Z_N com N crescente (rumo a U(1) com fótons) — a fração destilável (bulk de fótons) cresce com N? Comparar a razão borda/bulk com a de Kabat/Donnelly-Wall para Maxwell
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
