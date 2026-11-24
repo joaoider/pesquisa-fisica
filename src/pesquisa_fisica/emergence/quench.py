@@ -60,3 +60,73 @@ def gauge_quench(N: int, m: float, J: float, times, center: int, ds, w: float = 
         MI.append([two_site_mi(n[center], n[j], float(ninj[k]), float(Cf[k])) for k, j in enumerate(js)])
         chis.append(max(psi.chi))
     return np.array(S), np.array(MI), chis
+
+
+# ---------------------------------------------------------------- MDRs de blocos disjuntos (partição de spin)
+
+def block_pair_rdms(psi: MPS, a0: int, b_starts, size: int = 2) -> dict:
+    """ρ(A ∪ B) para A = [a0, a0+size) fixo e B = [b, b+size) para cada b em b_starts (b ≥ a0+size).
+    Contração direta do MPS na forma B (canônica à direita); custo O(N χ³ 4^size)."""
+    b_starts = sorted(b_starts)
+    S = psi.get_SL(a0)
+    env = np.diag(np.asarray(S) ** 2)[None, :, :].astype(complex)          # (K, χ, χ)
+    B = lambda i: psi.get_B(i, form="B").to_ndarray()                       # (vL, p, vR)
+
+    def open_site(env, i):
+        T = B(i)
+        tmp = np.tensordot(env, T, axes=([1], [0]))                      # k b p c
+        new = np.tensordot(tmp, T.conj(), axes=([1], [0]))                # k p c q d
+        new = new.transpose(0, 1, 3, 2, 4)                                # k p q c d
+        K, d = env.shape[0], T.shape[1]
+        return new.reshape(K * d * d, T.shape[2], T.shape[2])
+
+    def close_site(env, i):
+        T = B(i)
+        tmp = np.tensordot(env, T, axes=([1], [0]))                      # k b p c
+        return np.tensordot(tmp, T.conj(), axes=([1, 2], [0, 1]))        # k c d
+
+    for i in range(a0, a0 + size):
+        env = open_site(env, i)
+    out = {}
+    pos = a0 + size
+    for b in b_starts:
+        while pos < b:
+            env = close_site(env, pos)
+            pos += 1
+        e = env
+        for i in range(b, b + size):
+            e = open_site(e, i)
+        vec = np.einsum("kcc->k", e)                                         # traço à direita
+        n = 2 * size                                                          # sítios abertos
+        t = vec.reshape([2, 2] * n)                                          # (p0,q0,p1,q1,...)
+        t = t.transpose(list(range(0, 2 * n, 2)) + list(range(1, 2 * n, 2)))
+        out[b] = t.reshape(2 ** n, 2 ** n)
+    return out
+
+
+def _S_rho(r):
+    w = np.linalg.eigvalsh((r + r.conj().T) / 2)
+    w = w[w > 1e-14]
+    return float(-(w * np.log(w)).sum())
+
+
+def _ptrace(rho, keep, n):
+    t = rho.reshape([2] * (2 * n))
+    drop = [i for i in range(n) if i not in keep]
+    for k, i in enumerate(sorted(drop, reverse=True)):
+        m = n - k
+        t = np.trace(t, axis1=i, axis2=i + m)
+    d = 2 ** len(keep)
+    return t.reshape(d, d)
+
+
+def block_mi_and_excess(rho4):
+    """Para ρ sobre (a1,a2,b1,b2): I(A:B) e Σ I(a:b) dos 4 pares de sítios."""
+    n = 4
+    SA, SB, SAB = _S_rho(_ptrace(rho4, [0, 1], n)), _S_rho(_ptrace(rho4, [2, 3], n)), _S_rho(rho4)
+    S1 = [_S_rho(_ptrace(rho4, [i], n)) for i in range(n)]
+    pair = 0.0
+    for a in (0, 1):
+        for b in (2, 3):
+            pair += S1[a] + S1[b] - _S_rho(_ptrace(rho4, [a, b], n))
+    return SA + SB - SAB, pair

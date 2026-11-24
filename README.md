@@ -393,6 +393,37 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - A trava da **IM de dois sítios** é outra coisa. Ela depende de J e não de m, então vem da interação gauge em si, e não da corda.
 - No espaço emergente, o gauge "fecha" o cone de luz da geometria local (pares de sítios) mesmo sem confinamento. A corda age sobre o emaranhamento de longa escala.
 
+## Correlações multipartidas após o quench (v0.17): a informação "sumida" não está em blocos de 2
+
+**Pergunta.** Na v0.16, a IM entre pares de sítios do gauge trava após o quench, mas a entropia de meia cadeia quase não muda. Hipótese: a informação está em correlações de vários sítios, como mésons de 2 sítios.
+
+**Método.**
+- Mesmo quench da v0.16 (N = 24, t = 6), agora com **gauge e livre por TDVP** na mesma partição (spin/qubits).
+- Matrizes densidade de blocos disjuntos calculadas por contração direta do MPS (`block_pair_rdms`, validada contra os correlatores com erro de 1e-15).
+- Medidas: IM entre blocos de 2 sítios, I(A₂:B₂), e o excesso multipartido f = [I(A₂:B₂) − Σ I(a:b)] / I(A₂:B₂).
+- Os blocos são **alinhados** aos pares do vácuo ([2k, 2k+1]) ou desalinhados.
+
+| caso | alcance sítio → bloco (gauge) | alcance sítio → bloco (livre) | f gauge | f livre |
+|---|---|---|---|---|
+| m = 0, J = 1 | 5 → 8 | 15 → 18 | 0,57 | 0,63 |
+| m = 0,5, J = 1 | 6 → 8 | 11 → 14 | 0,75 | 0,63 |
+| m = 0,5, J = 2 | 4 → 8 | 11 → 14 | 0,86 | 0,31 |
+
+| Previsão | Resultado |
+|---|---|
+| P1: blocos ganham mais alcance no gauge que no livre | **Falhou** em 2 de 3 casos. Os blocos também travam em ~8 sítios |
+| P2: f_gauge > f_livre nos 3 casos | **Falhou** em m = 0 (0,57 < 0,63). Passou com m > 0 |
+| P3: f maior com blocos alinhados (méson) | **Falhou** em J = 2 (0,862 contra 0,870). As diferenças são pequenas em todos os casos |
+
+**Achados (não previstos).**
+1. **Não há sinal balístico no gauge.** No livre, a IM de blocos tem picos na borda do cone de luz: são os pares de quasipartículas emaranhadas do quadro de Calabrese-Cardy, por exemplo d = 12 em m = 0. No gauge, a IM decai monotonicamente, com ou sem confinamento.
+2. **A fração multipartida cresce com o confinamento:** 0,57 → 0,75 → 0,86.
+
+**Leitura.**
+- A entropia de meia cadeia do gauge (S = 2,4 em m = 0) não vem de pares localizados de 2 sítios a longa distância.
+- Ou ela está em blocos maiores, ou é uma forma de emaranhamento sem portador local, que nenhum par de regiões pequenas enxerga.
+- O próximo passo é medir a escala diretamente: a entropia de blocos contíguos S(ℓ) em função do tamanho ℓ, e a informação tripartida I₃.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -410,7 +441,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: razão assintótica das taxas em cadeias longas via DMRG (v0.14) — **≈1,5, não 2: previsão falsificada**
 - [x] H2: regime confinante m ≠ 0 (v0.15) — sem assinatura de corda no vácuo; razão = f(m/g), de 1,5 a 1
 - [x] H2: confinamento na dinâmica (v0.16) — S(t) separa confinamento de blindagem; a trava da IM local vem da interação gauge (também em m = 0)
-- [ ] H2: por que a IM de dois sítios trava em m = 0? Testar se o emaranhamento migra para correlações multipartidas (IM de blocos, informação tripartida I₃)
+- [x] H2: correlações multipartidas após o quench (v0.17) — blocos de 2 também travam; sem pico balístico no gauge; f cresce com confinamento
+- [ ] H2: em que escala está o emaranhamento do gauge? S(ℓ) de blocos contíguos e I₃ após o quench
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
