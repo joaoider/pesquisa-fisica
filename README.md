@@ -710,6 +710,38 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
   - Na dinâmica, o potencial de Gauss de alcance ilimitado gera emaranhamento multipartido acima do que dá uma interação local (v0.22–v0.23) e suprime pares longos (v0.22, v0.24).
 - O que caiu: o fator 1,5 (v0.14), a lei em m/g (v0.15), a frente rápida (v0.19) e a ressonância de ruptura (v0.25–v0.26).
 
+## 2+1D com campo de gauge dinâmico (v0.27): a lição das cordas sobrevive fora de 1+1D
+
+**Pergunta.** Fora de 1+1D, o campo de gauge tem dinâmica própria (plaquetes que oscilam) e a lei de Gauss deixa de ser trivial. Mesmo assim, as cordas elétricas contaminam a IM, como as linhas de Wilson implícitas da v0.19?
+
+**Modelo.** Gauge Z₂ pura, H = −Σ Bₚ − h Σ σˣ_ℓ, com bordas lisas. Uma **dualidade exata** a leva ao Ising com campo transverso na rede dual de plaquetes (5×4): Bₚ → μˣₚ e σˣ_ℓ → μᶻₚμᶻ_q, ou seja, um μᶻ isolado é uma corda elétrica até a borda.
+- Setor Z₂-par, diagonalização exata (524.288 estados), validada contra diagonalização densa (1e-15).
+- Fases: desconfinada (h = 0,15), perto da transição (h ≈ h_c ≈ 0,33) e confinada (h = 0,8).
+
+Álgebras de cada plaquete:
+- **full:** os spins duais completos, o que inclui cordas μᶻμᶻ entre regiões;
+- **inv:** só Bₚ, ou seja, a diagonal em μˣ.
+
+| h | fase | IM longe/perto, full | IM longe/perto, inv | Spearman (geometria × rede), full | Spearman, **inv** |
+|---|---|---|---|---|---|
+| 0,15 | desconfinada | 2·10⁻⁷ | ~0 | 0,980 | **0,980** |
+| 0,33 | transição | 2·10⁻³ | 1·10⁻⁷ | 0,982 | **0,983** |
+| 0,8 | confinada | **0,69** | 3·10⁻⁷ | **0,574** | **0,936** |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: confinado ⇒ IM full de longo alcance (≥ 0,1) e IM inv local (≤ 1e-3) | **Passou** (0,69 contra 3·10⁻⁷) |
+| P2: desconfinado ⇒ as duas decaem (≤ 1e-2) | **Passou** |
+| P3: geometria inv reconstrói a rede (≥ 0,8) em todo h, e a full falha no confinado (< 0,5) | **Falhou na margem.** A inv passa (0,94–0,98); a full no confinado degrada para 0,574, mas não abaixo de 0,5 |
+
+**Leitura.**
+- No confinamento (Ising dual ordenado), o estado tem cordas elétricas condensadas. Na álgebra full elas dão IM quase constante entre plaquetes arbitrariamente distantes: é a versão 2+1D, com campo dinâmico, das linhas de Wilson implícitas da v0.19.
+- A geometria emergente da álgebra full degrada justamente na fase confinada.
+- Na **álgebra invariante**, a IM é local nas três fases e reconstrói a rede 2D (Spearman 0,94–0,98).
+- A lição metodológica de 1+1D (v0.19–v0.20) **generaliza** para teoria de gauge com campo dinâmico: a geometria emergente de uma teoria de gauge precisa ser lida numa álgebra invariante.
+
+**Limites.** Gauge sem matéria, rede pequena (5×4), Z₂ (não U(1)) e só o estado fundamental. O centro elétrico (fluxos de fronteira como variáveis clássicas) ainda não foi medido em 2+1D. É ali que deve aparecer o análogo de rede do termo de contato de Kabat, a ponte com G (v0.11–v0.12).
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -738,6 +770,8 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 - [x] H2: lei de escala da supressão de pares (v0.25) — sem colapso em degrau; ressonância: pico de IM em D ≈ R (escala de ruptura impressa na geometria)
 - [x] H2: ressonância de ruptura no Schwinger real (v0.26) — não existe; a da v0.25 era artefato do corte
 - [ ] H2: isolar o efeito par/ímpar em R (células staggered)
+- [x] H2: 2+1D, gauge Z₂ pura (v0.27) — cordas elétricas contaminam a IM full no confinado; a álgebra inv reconstrói 2D em todas as fases
+- [ ] H2/ponte: centro elétrico em 2+1D — entropia de bordas (fluxos de fronteira) como análogo de rede do termo de contato de Kabat; escala com o perímetro e sinal relativo ao bulk
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
