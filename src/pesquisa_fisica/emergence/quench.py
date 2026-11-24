@@ -130,3 +130,33 @@ def block_mi_and_excess(rho4):
         for b in (2, 3):
             pair += S1[a] + S1[b] - _S_rho(_ptrace(rho4, [a, b], n))
     return SA + SB - SAB, pair
+
+
+def block_entropy(psi: MPS, a: int, ell: int) -> float:
+    """S do bloco contíguo [a, a+ell) via SVD de X[(p…),(α,γ)] = S_α (B…B)_{α p… γ}. Dimensão 2^ℓ × χ_L χ_R."""
+    S = np.asarray(psi.get_SL(a))
+    T = np.diag(S).astype(complex)                                   # (α, χ)
+    T = T[:, None, :]                                                 # (α, P=1, χ)
+    for i in range(a, a + ell):
+        Bi = psi.get_B(i, form="B").to_ndarray()                      # (χ, p, χ')
+        T = np.tensordot(T, Bi, axes=([2], [0]))                      # (α, P, p, χ')
+        T = T.reshape(T.shape[0], T.shape[1] * T.shape[2], T.shape[3])
+    X = T.transpose(1, 0, 2).reshape(T.shape[1], -1)
+    s = np.linalg.svd(X, compute_uv=False) ** 2
+    s = s[s > 1e-14]
+    return float(-(s * np.log(s)).sum())
+
+
+def cut_entropy(psi: MPS, x: int) -> float:
+    """Entropia do corte que separa [0, x) de [x, N)."""
+    return float(psi.entanglement_entropy()[x - 1])
+
+
+def tripartite_info(psi: MPS, a: int, size: int = 2) -> float:
+    """I₃(A:B:C) para blocos adjacentes A=[a,a+s), B=[a+s,a+2s), C=[a+2s,a+3s)."""
+    s = size
+    SA, SB, SC = (block_entropy(psi, a + k * s, s) for k in range(3))
+    SAB, SBC = block_entropy(psi, a, 2 * s), block_entropy(psi, a + s, 2 * s)
+    SABC = block_entropy(psi, a, 3 * s)
+    SAC = _S_rho(block_pair_rdms(psi, a, [a + 2 * s], size=s)[a + 2 * s])
+    return SA + SB + SC - SAB - SBC - SAC + SABC

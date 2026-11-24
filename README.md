@@ -424,6 +424,34 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - Ou ela está em blocos maiores, ou é uma forma de emaranhamento sem portador local, que nenhum par de regiões pequenas enxerga.
 - O próximo passo é medir a escala diretamente: a entropia de blocos contíguos S(ℓ) em função do tamanho ℓ, e a informação tripartida I₃.
 
+## Escala do emaranhamento após o quench (v0.18): confinamento ⇒ lei de área; blindagem mantém pares longos
+
+**Pergunta.** A v0.17 mostrou que a entropia de meia cadeia do gauge não está em pares de regiões pequenas. Em que escala ela está?
+
+**Método.** Mesmo quench (N = 24, t = 6, TDVP), com gauge e livre de mesmo gap na partição de spin. Medidas:
+- a entropia S(ℓ) de um bloco central contíguo, para ℓ = 1..10 (SVD na forma mista, validada contra o TeNPy);
+- a IM entre as regiões **externas** ao bloco, I(L:R) = S_corte(c) + S_corte(c+ℓ) − S(bloco), que mede os pares que atravessam o bloco inteiro;
+- a informação tripartida I₃ de três blocos adjacentes de 2 sítios.
+
+| caso | ℓ* (90% da saturação), gauge / livre | I(L:R) em ℓ = 8, gauge / livre | I₃, gauge / livre |
+|---|---|---|---|
+| m = 0, J = 1 (blindagem) | 9 / 9 | 0,79 / 1,95 (**0,40**) | −0,107 / −0,161 |
+| m = 0,5, J = 1 | 7 / 8 | 0,10 / 0,89 (**0,12**) | −0,185 / −0,029 |
+| m = 0,5, J = 2 | 5 / 9 | 0,004 / 0,34 (**0,01**) | −0,096 / −0,082 |
+
+| Previsão (nos 3 casos) | Resultado |
+|---|---|
+| P1: S(ℓ) do gauge satura antes | **Falhou em m = 0** (empate em 9). Passou com m > 0 |
+| P2: I(L:R)_gauge < 0,3 · livre | **Falhou em m = 0** (0,40). Passou com m > 0 (0,12; 0,01) |
+| P3: I₃ do gauge negativa e abaixo da do livre | **Falhou em m = 0**. Passou com m > 0 |
+
+**Leitura.** As três previsões falham exatamente no caso blindado e passam nos dois casos confinados.
+- **Confinamento (m > 0)** produz emaranhamento de curto alcance e denso. Com J = 2, S(ℓ) do gauge para em ~1,05 a partir de ℓ ≈ 5 (lei de área), enquanto o livre segue crescendo até 2,4. Os pares que atravessam 8 sítios praticamente somem (1% do livre), e a informação fica multipartida (I₃ mais negativa).
+- **Blindagem (m = 0)**: o Schwinger sem massa é um bóson livre massivo. Os mésons propagam balisticamente e **carregam pares longos** (I(L:R) em ℓ = 8 é 40% do livre). Esses pares são invisíveis à IM de sítios e de blocos de 2 da v0.16–v0.17, porque o méson é um objeto estendido nas variáveis de rede.
+- Isso resolve o quebra-cabeça da v0.17: o emaranhamento "sumido" em m = 0 está em escala grande, carregado por objetos compostos.
+
+**Para H2.** O espaço emergente de um sistema confinante é estritamente local, com emaranhamento de lei de área após o quench. O de um sistema blindado mantém conectividade de longo alcance, mas só em escalas maiores que o tamanho do méson. A escala em que a geometria "se forma" é o tamanho das partículas compostas.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -442,7 +470,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: regime confinante m ≠ 0 (v0.15) — sem assinatura de corda no vácuo; razão = f(m/g), de 1,5 a 1
 - [x] H2: confinamento na dinâmica (v0.16) — S(t) separa confinamento de blindagem; a trava da IM local vem da interação gauge (também em m = 0)
 - [x] H2: correlações multipartidas após o quench (v0.17) — blocos de 2 também travam; sem pico balístico no gauge; f cresce com confinamento
-- [ ] H2: em que escala está o emaranhamento do gauge? S(ℓ) de blocos contíguos e I₃ após o quench
+- [x] H2: escala do emaranhamento após o quench (v0.18) — confinamento ⇒ lei de área; blindagem ⇒ pares longos via mésons
+- [ ] H2: tornar explícita a geometria emergente em escala de méson — IM entre blocos de tamanho ℓ_b ≳ tamanho do méson (coarse-graining) em m = 0, e checar se o cone de luz balístico reaparece
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
