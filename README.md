@@ -482,6 +482,51 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 
 **Consequência metodológica para H2.** Toda a IM de teorias de gauge usada desde a v0.6 (U(1), SU(2), SU(3), v0.13–v0.18) usou partições **só de matéria com a lei de Gauss eliminada**. Essa partição mistura correlações locais com coerências de corda. É a mesma questão de "qual álgebra?" que apareceu no termo de contato de Kabat (v0.12): o emaranhamento de campos de gauge depende da escolha do centro elétrico. Os resultados qualitativos de confinamento sobrevivem (P3 e a frente freada nas cargas), mas os números de localidade precisam ser refeitos numa partição invariante de gauge.
 
+## Localidade em álgebras invariantes de gauge (v0.20): a causalidade volta; a conclusão qualitativa de H2 sobrevive
+
+**Pergunta.** A v0.19 mostrou que a IM na partição de qubits (lei de Gauss eliminada) mistura coerências de corda. O que acontece com uma álgebra invariante de gauge?
+
+**Álgebras comparadas** (Casini, Huerta & Rosabal 2014), em `emergence/gauge_algebra.py`:
+- **qubit:** a álgebra completa da região (a usada até a v0.19). Inclui implicitamente linhas de Wilson entre regiões.
+- **inv:** operadores que comutam com a carga de cada região. Não há linhas de Wilson entre regiões; ρ fica decomposto por setores Q_A, Q_B.
+- **ce (centro elétrico):** inv mais os fluxos de fronteira. Em 1D aberto, o fluxo à esquerda de R é a carga total à esquerda (variável clássica).
+- **carga:** só a diagonal na base de carga.
+
+**Quench exato** (N = 20, m = 0, J = 1, blocos de 4 sítios):
+
+| álgebra | t_pico (r = 2, 4, 6, 8) | velocidade da frente |
+|---|---|---|
+| qubit | 1,61 · 1,60 · 1,58 · 1,59 (simultâneos) | 3,77 |
+| **inv** | **2,46 · 4,54 · 5,77 · > 6** | **1,89** |
+| ce | 1,92 · 2,08 · 5,63 · > 6 | 1,76 |
+| carga | 1,40 · 1,91 · 5,66 · 5,60 | 1,85 |
+
+**Vácuo** (N = 16, m = 0,5; regiões = células de 2 sítios), razão I(d = 1)/I(d = 3):
+
+| J | qubit | **inv** | ce | carga |
+|---|---|---|---|---|
+| 0 | 42 | **2,4·10³** | 6,1·10² | 2,6·10³ |
+| 0,5 | 289 | **3,0·10⁴** | 1,8·10⁴ | 3,3·10⁴ |
+| 2 | 9,1·10³ | **7,4·10⁶** | 5,4·10⁶ | 7,7·10⁶ |
+| 5 | 7,4·10⁵ | 1,5·10¹⁰ * | 1,0·10¹⁰ * | 1,5·10¹⁰ * |
+
+\* Em J = 5, I(d = 3) ~ 10⁻¹¹ está no piso numérico.
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: na álgebra inv a frente é causal (t_pico crescente, v ∈ [1,5; 2,3]) | **Passou** (v = 1,89) |
+| P2: o centro elétrico é mais rápido (v_ce > v_inv + 0,5) | **Falhou** (v_ce = 1,76) |
+| P3: no vácuo, a razão de localidade cresce com J na álgebra inv | **Passou** (0 → 0,5 → 2) |
+
+**Leitura.**
+- Remover as linhas de Wilson entre regiões **restaura a causalidade**: a frente volta a v ≈ 2, igual à do férmion livre.
+- O centro elétrico **também é causal**. Meu raciocínio de que o fluxo de fronteira levaria informação de Coulomb instantânea estava errado: o fluxo só muda por correntes locais que atravessam a fronteira.
+- A conclusão qualitativa de H2 (v0.6–v0.8: acoplar o gauge deixa o emaranhamento mais local) **sobrevive** na álgebra invariante.
+- Os **números mudam por ordens de grandeza**. Em J = 0 a razão é 42 em qubits e 2.400 em inv. Boa parte da "não localidade" de base vinha de coerências de hopping/corda, e não de correlações invariantes.
+- Na álgebra invariante, quase toda a IM é de cargas: inv ≈ carga. A parte quântica dentro das células é pequena.
+
+**Para H2:** a geometria emergente de uma teoria de gauge precisa ser definida numa álgebra invariante. Com ela, o espaço emergente é causal e local, e mais local com acoplamento forte. É a mesma lição do termo de contato de Kabat (v0.12): em teoria de gauge, "emaranhamento" só tem sentido junto com a escolha da álgebra.
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -502,7 +547,8 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: correlações multipartidas após o quench (v0.17) — blocos de 2 também travam; sem pico balístico no gauge; f cresce com confinamento
 - [x] H2: escala do emaranhamento após o quench (v0.18) — confinamento ⇒ lei de área; blindagem ⇒ pares longos via mésons
 - [x] H2: coarse-graining em escala de méson (v0.19) — sem cone balístico na IM total (picos simultâneos, artefato de corda); nas cargas, o cone é causal e igual ao livre em m = 0
-- [ ] H2: refazer as medidas de localidade (v0.6–v0.8, v0.13–v0.18) numa partição invariante de gauge: Hilbert estendido com elos e centro elétrico (Casini-Huerta-Rosabal), comparando com a IM só de cargas como cota inferior
+- [x] H2: localidade em álgebras invariantes de gauge (v0.20) — causalidade restaurada (v ≈ 1,9); conclusão qualitativa de H2 sobrevive; números mudam por ordens de grandeza
+- [ ] H2: refazer a geometria emergente completa (distâncias de IM, dimensão, MDS) na álgebra invariante para SU(2) e SU(3), e a razão gauge/livre da v0.14 na mesma álgebra
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
