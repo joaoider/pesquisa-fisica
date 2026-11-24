@@ -4,7 +4,7 @@ Pré-registro (previsão commitada antes de ler as figuras, 3339280): P1 curva i
 P2 dados a |Δν| ≤ 0,07 do IDEAL; P3 E_N medido > 0 e ≤ ideal + 0,1.
 Resultado: P1 ✓ (0,0003), P2 ✗ (+0,077 e +0,173 nos dois últimos passos), P3 ✓.
 Exploratório: Trotter Z·pares·ímpares (4 passos de π/8) + desfase p=0,038 reproduz EXATAMENTE os pontos de
-discretização e o modelo de erro do artigo; rms contra os dados cai de 0,105 (ideal) para 0,015.
+discretização e o modelo de erro do artigo; rms contra os dados cai de 0,085 (ideal) para 0,015.
 """
 import json
 from pathlib import Path
@@ -42,4 +42,4 @@ def test_exploratorio_reproduz_modelo_de_erro_do_artigo():
     assert np.max(np.abs(np.array(tz["com_desfase"][1:]) - np.array(D["nu_modelo_erro_artigo"][1:]))) < 1e-3
     rms_ideal = np.sqrt(np.mean((np.array(x["esquemas"]["ideal (exato)"]["sem_ruido"]) - D["nu_exp"]) ** 2))
     rms_mod = np.sqrt(np.mean((np.array(tz["com_desfase"]) - D["nu_exp"]) ** 2))
-    assert rms_mod < 0.02 and rms_ideal > 0.09
+    assert rms_mod < 0.02 and rms_ideal > 0.08

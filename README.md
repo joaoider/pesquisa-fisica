@@ -853,7 +853,7 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 | P2: dados a \|Δν\| ≤ 0,07 da curva **ideal** | **Falhou** nos dois últimos passos (+0,077; +0,173) |
 | P3: E_N medido > 0 e ≤ ideal + 0,1 | **Passou** (a descoerência só reduz o emaranhamento) |
 
-**Exploratório (não pré-registrado): por que P2 falhou.** O experimento não implementa a evolução contínua. Ele usa **4 passos de Trotter** de π/8 e sofre **desfase**. Com a ordem Z · (pares) · (ímpares), nosso código reproduz **exatamente** os pontos de "erro de discretização" do artigo: 0,1982 / 0,4716 / 0,4235 / 0,2252. Somando o desfase publicado (p = 0,038 por qubit por passo), reproduz exatamente o "modelo de erro" deles: 0,1982 / 0,448 / 0,4333 / 0,3116. O erro quadrático médio contra os dados cai de **0,105 (ideal) para 0,015 (Trotter + desfase)**.
+**Exploratório (não pré-registrado): por que P2 falhou.** O experimento não implementa a evolução contínua. Ele usa **4 passos de Trotter** de π/8 e sofre **desfase**. Com a ordem Z · (pares) · (ímpares), nosso código reproduz **exatamente** os pontos de "erro de discretização" do artigo: 0,1982 / 0,4716 / 0,4235 / 0,2252. Somando o desfase publicado (p = 0,038 por qubit por passo), reproduz exatamente o "modelo de erro" deles: 0,1982 / 0,448 / 0,4333 / 0,3116. O erro quadrático médio contra os dados cai de **0,085 (ideal) para 0,015 (Trotter + desfase)**.
 
 **Leitura.**
 - O código de H2 está **validado contra dado real**: a física ideal coincide com a do artigo a 3·10⁻⁴, e o pipeline de erros reproduz o deles exatamente.
