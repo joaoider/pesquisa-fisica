@@ -649,6 +649,36 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 
 **Para H2.** A assinatura dinâmica do gauge no espaço emergente é a de um **potencial confinante cujo alcance não tem corte**. Em escalas menores que R, qualquer potencial linear truncado faz o mesmo; em escalas maiores, só o gauge. Fica a pergunta para 2+1D e 3+1D, onde a lei de Gauss dá Coulomb (log ou 1/r) e não linear: o confinamento passa a depender da dinâmica não abeliana.
 
+## Lei de escala da supressão de pares (v0.25): não é degrau, é ressonância no comprimento de ruptura
+
+**Pergunta.** Se o potencial truncado em R age como uma corda que se rompe em R (v0.24), a supressão de pares entre blocos a distância D deveria depender só de x = R/D, como um degrau.
+
+**Método.** Caso confinante (J = 2, gap 3,45). H_R com m ajustado ao mesmo gap, R ∈ {2, 3, 4, 5, 6, 8, 10, 12, 19}. Quench exato (N = 20). Blocos de 4 sítios com distância centro a centro D ∈ {8, 10, 12, 14}. Observável: Ī = média em t ∈ [3,6] de I_inv(A:B). Fração de escape: f = (Ī_R − Ī_gauge)/(Ī_{R=2} − Ī_gauge).
+
+| R | Ī em D = 8 | D = 10 | D = 12 | D = 14 |
+|---|---|---|---|---|
+| 2 | 0,114 | 0,110 | 0,080 | 0,051 |
+| 3 | 0,052 | 0,029 | 0,019 | 0,015 |
+| 6 | 0,226 | 0,167 | 0,145 | 0,123 |
+| 8 | **0,381** | 0,270 | 0,144 | 0,157 |
+| 10 | 0,301 | **0,437** | 0,297 | 0,135 |
+| 12 | 0,141 | 0,337 | **0,505** | 0,383 |
+| 19 (gauge) | 0,034 | 0,005 | 0,0005 | 0,00004 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: colapso de f em R/D com forma de degrau (f ≥ 0,5 se x ≤ 0,6; f ≤ 0,2 se x ≥ 1,5) | **Falhou.** f chega a 7,45 e não é um degrau |
+| P2: R_meio ∝ D | **Falhou.** f não é monótona em R, então R_meio não fica definido |
+
+**Achado (exploratório): ressonância no comprimento de ruptura.**
+- Com alcance finito, a IM entre blocos não é apenas "não suprimida": ela é **amplificada**, até 7× o caso local e 10⁴× o gauge.
+- Para R ≥ 8, o **pico em D acompanha R**: 8 → 8, 10 → 10, 12 → 12.
+- Interpretação: o quench cria pares que se esticam sob a tensão J até a separação R, onde a força some. Pares com energia insuficiente para escapar passam muito tempo perto do ponto de retorno (como um oscilador clássico), e os que escapam saem a partir de R. Nos dois casos o emaranhamento se concentra na distância de ruptura.
+- **A escala de ruptura da corda fica impressa na geometria emergente** como um pico de conectividade.
+- Há um efeito par/ímpar em R (R = 3 e 5 dão Ī baixo, com m casado ≈ 0,51 contra ≈ 0,8 para R par), ligado às células de 2 sítios da rede staggered. Ele ainda não foi isolado.
+
+**Para H2.** O gauge (sem ruptura) suprime a conectividade em todas as distâncias. Qualquer ruptura em R cria um "atalho" de emaranhamento na escala R. Num mundo com matéria dinâmica de verdade (QCD), a corda se rompe por criação de pares. A previsão que isso sugere: **o espaço emergente de uma teoria confinante com ruptura de corda deve ter conectividade realçada na escala de ruptura** (≈ 2m/σ). É uma previsão testável no próprio Schwinger massivo, comparando cargas externas fracionárias (sem ruptura) e inteiras (com ruptura).
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -674,7 +704,9 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 - [x] H2: confinamento na dinâmica na álgebra invariante (v0.22) — efeito real; I₃ < 0 é assinatura específica do gauge (livre: I₃ ≈ 0)
 - [x] H2: controle com interação local (v0.23) — sinal de I₃ não é exclusivo do gauge; magnitude 4–100× maior é; pares longos suprimidos 13–53× além da interação local
 - [x] H2: potencial linear truncado em R (v0.24) — I₃ satura em R ≳ escala do bloco; supressão de pares exige alcance completo (Gauss)
-- [ ] H2: lei de escala — supressão de pares em função de R/d (d = separação L–R) para vários d; o colapso numa curva confirmaria o quadro de 'corda que se rompe em R'
+- [x] H2: lei de escala da supressão de pares (v0.25) — sem colapso em degrau; ressonância: pico de IM em D ≈ R (escala de ruptura impressa na geometria)
+- [ ] H2: ressonância de ruptura no Schwinger de verdade — quench com cargas externas (θ / fluxo de fundo): a IM tem pico na escala de ruptura 2m/σ quando a corda se rompe por criação de pares?
+- [ ] H2: isolar o efeito par/ímpar em R (células staggered)
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
