@@ -74,3 +74,39 @@ def algebra_mi(full, N, A, B, mode):
     cAB = [left_A, gap] if mode == "ce" else []
     return (algebra_entropy(full, N, [A], cA, mode) + algebra_entropy(full, N, [B], cB, mode)
             - algebra_entropy(full, N, [A, B], cAB, mode))
+
+
+# ---------------------------------------------------------------- versão MPS (TeNPy): duas células de 2 sítios
+
+def _occ_bits_tenpy(n_sites: int) -> np.ndarray:
+    """Bits de ocupação para índices de ρ vindos de block_pair_rdms (TeNPy SpinHalfSite: p=1 ↔ 'up' = ocupado)."""
+    idx = np.arange(1 << n_sites)
+    return (idx[:, None] >> (n_sites - 1 - np.arange(n_sites))) & 1
+
+
+def two_cell_mi(rho16: np.ndarray, cell_starts=(0, 0)) -> dict:
+    """IM entre duas células de 2 sítios (ρ sobre a1,a2,b1,b2) nas álgebras qubit, inv e carga.
+    cell_starts dá a paridade do 1º sítio de cada célula (Q_k = bit_k − (k mod 2))."""
+    from .quench import _ptrace
+
+    b = _occ_bits_tenpy(4)
+    par = np.array([cell_starts[0] % 2, (cell_starts[0] + 1) % 2, cell_starts[1] % 2, (cell_starts[1] + 1) % 2])
+    q = b - par
+    QA, QB = q[:, :2].sum(1), q[:, 2:].sum(1)
+    b2 = _occ_bits_tenpy(2)
+
+    def S_masked(r, labels_list):
+        m = np.ones(r.shape, bool)
+        for L in labels_list:
+            m &= L[:, None] == L[None, :]
+        return _H(np.linalg.eigvalsh((r + r.conj().T) / 2 * m))
+
+    rA, rB = _ptrace(rho16, [0, 1], 4), _ptrace(rho16, [2, 3], 4)
+    qA1 = (b2 - par[:2]).sum(1)
+    qB1 = (b2 - par[2:]).sum(1)
+    out = {}
+    out["qubit"] = S_masked(rA, []) + S_masked(rB, []) - S_masked(rho16, [])
+    out["inv"] = S_masked(rA, [qA1]) + S_masked(rB, [qB1]) - S_masked(rho16, [QA, QB])
+    diag = lambda r: _H(np.real(np.diag(r)))
+    out["carga"] = diag(rA) + diag(rB) - diag(rho16)
+    return out

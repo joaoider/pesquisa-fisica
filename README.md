@@ -527,6 +527,36 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 
 **Para H2:** a geometria emergente de uma teoria de gauge precisa ser definida numa álgebra invariante. Com ela, o espaço emergente é causal e local, e mais local com acoplamento forte. É a mesma lição do termo de contato de Kabat (v0.12): em teoria de gauge, "emaranhamento" só tem sentido junto com a escolha da álgebra.
 
+## Razão gauge/livre na álgebra invariante (v0.21): o fator 1,5 era artefato; a mesmo gap, gauge = livre
+
+**Pergunta.** A v0.14 mediu que o Schwinger deixa o emaranhamento ≈ 1,5× mais local que o férmion livre de mesmo gap, e a v0.15 transformou isso numa lei de escala em m/g. As duas medidas foram feitas em partições de matéria (qubits/fermiônica). O efeito sobrevive na álgebra invariante (v0.20)?
+
+**Argumento antes de rodar.** Na álgebra invariante só restam correlações **neutras**. Nos dois modelos, elas decaem com a excitação neutra mais leve, cuja massa é justamente o gap que está sendo casado. Previsão: razão ≈ 1.
+
+**Método.** DMRG com N = 64 para o Schwinger (m = 0) e para o livre de mesmo gap, na mesma partição. As regiões são células de 2 sítios, e a IM entre células foi calculada nas álgebras qubit, inv e carga (validada contra a diagonalização exata, erro 1e-8). Taxa por sítio vinda do ajuste A·d^(−α)·e^(−κd).
+
+| J | gap | **razão inv** | κ_inv/gap (gauge; livre) | razão carga | razão qubit (controle) |
+|---|---|---|---|---|---|
+| 0,25 | 0,680 | **1,03** | 0,97; 0,94 | 1,02 | 1,48 |
+| 0,5 | 1,019 | **1,04** | 0,99; 0,95 | 1,04 | 1,48 |
+| 1,0 | 1,572 | **1,07** | 1,00; 0,94 | 1,06 | 1,46 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: razão inv ∈ [0,85; 1,15] | **Passou** (1,03–1,07) |
+| P2: κ/gap ∈ [0,8; 1,2] nos dois modelos | **Passou** (0,94–1,00) |
+| P3: controle de qubits ∈ [1,3; 1,7] (reproduz a v0.14) | **Passou** (1,46–1,48) |
+
+**Leitura.**
+- O fator ≈ 1,5 da v0.14 e a lei de escala em m/g da v0.15 vinham de **correlações carregadas**, isto é, de linhas de Wilson implícitas.
+- Na álgebra invariante, **a mesmo gap o gauge é indistinguível do livre**. Há um resíduo de 3–7%, que cresce levemente com J (efeito de rede ainda não isolado).
+- Toda a localização do emaranhamento pelo gauge vem da **geração de gap** (a massa de Schwinger μ = g/√π), e não de algum efeito adicional da força.
+
+**Consequência para H2.**
+- A versão forte ("o gauge deixa o espaço emergente mais local do que a massa sozinha explicaria") está **refutada** na álgebra invariante.
+- Sobrevive a versão fraca: o acoplamento gauge gera massa, e a massa localiza o emaranhamento. Isso é genérico, e qualquer teoria com gap faz o mesmo.
+- O papel específico do gauge no espaço emergente tem de ser procurado em outro lugar: no termo de contato e no centro elétrico (v0.11–v0.12), na dinâmica confinante (v0.16) ou na estrutura de lei de área (v0.18).
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -548,7 +578,9 @@ A razão é a mesma em N = 64 e 96 (diferença < 0,03). Extrapolada para J → 0
 - [x] H2: escala do emaranhamento após o quench (v0.18) — confinamento ⇒ lei de área; blindagem ⇒ pares longos via mésons
 - [x] H2: coarse-graining em escala de méson (v0.19) — sem cone balístico na IM total (picos simultâneos, artefato de corda); nas cargas, o cone é causal e igual ao livre em m = 0
 - [x] H2: localidade em álgebras invariantes de gauge (v0.20) — causalidade restaurada (v ≈ 1,9); conclusão qualitativa de H2 sobrevive; números mudam por ordens de grandeza
-- [ ] H2: refazer a geometria emergente completa (distâncias de IM, dimensão, MDS) na álgebra invariante para SU(2) e SU(3), e a razão gauge/livre da v0.14 na mesma álgebra
+- [x] H2: razão gauge/livre da v0.14 na álgebra invariante (v0.21) — ≈ 1,0: o fator 1,5 era artefato
+- [ ] H2: refazer v0.16–v0.18 (quench: lei de área × blindagem) na álgebra invariante — quais efeitos dinâmicos do confinamento sobrevivem?
+- [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
 - [x] H2: localidade emergente do espectro, caso invariante por translação (v0.9); caso desordenado inconclusivo
 - [x] H2: cone de luz, estrutura causal e isotropia de Lorentz emergente (v0.9)
