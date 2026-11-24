@@ -679,6 +679,37 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 
 **Para H2.** O gauge (sem ruptura) suprime a conectividade em todas as distâncias. Qualquer ruptura em R cria um "atalho" de emaranhamento na escala R. Num mundo com matéria dinâmica de verdade (QCD), a corda se rompe por criação de pares. A previsão que isso sugere: **o espaço emergente de uma teoria confinante com ruptura de corda deve ter conectividade realçada na escala de ruptura** (≈ 2m/σ). É uma previsão testável no próprio Schwinger massivo, comparando cargas externas fracionárias (sem ruptura) e inteiras (com ruptura).
 
+## Ressonância de ruptura no Schwinger real (v0.26): não existe; a da v0.25 era artefato do corte
+
+**Pergunta.** A ressonância da v0.25 (pico de IM na distância de ruptura R) aparece no Schwinger massivo de verdade, onde a corda se rompe por criação de pares, na escala d* ≈ 2·gap/J?
+
+**Método.** Quench exato (N = 20) sem corte artificial, nos casos (m, J) = (0,5; 2), (0,5; 1), (1; 1), (1; 0,75), com d* = 3,45, 4,97, 6,82 e 8,40. IM invariante entre duas células de 2 sítios (alinhadas à rede) a distância D = 2..14. Média em t ∈ [3,6] e também instante a instante.
+
+| (m, J) | d* | Ī(D = 2, 4, 6, 8, 10) |
+|---|---|---|
+| (0,5; 2) | 3,45 | 0,249 · 0,028 · 0,009 · 0,0016 · 0,0001 |
+| (0,5; 1) | 4,97 | 0,197 · 0,042 · 0,013 · 0,0031 · 0,0004 |
+| (1; 1) | 6,82 | 0,188 · 0,019 · 0,003 · 0,0005 · 0,00004 |
+| (1; 0,75) | 8,40 | 0,186 · 0,031 · 0,005 · 0,0009 · 0,0001 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: pico interior de Ī(D) em [4, 12] | **Falhou.** Ī(D) é monótona decrescente em todos os casos |
+| P2: D_pico acompanha d* | **Falhou** (não há pico) |
+
+Conferência: o decaimento é monótono **em todos os instantes**, então a média no tempo não escondia nenhum pico transitório.
+
+**Leitura.**
+- A ressonância da v0.25 era um **artefato do corte**: além de R a força é exatamente zero e as partículas passam a ser livres, carregando emaranhamento ao longo do caminho.
+- Na ruptura física, o novo par se recombina com as extremidades em **mésons neutros e ligados**. Nenhum fragmento fica livre, e a conectividade emergente continua decaindo com a distância.
+- A "nova direção" da v0.25 está **encerrada**: a escala de ruptura não fica impressa na geometria emergente do Schwinger.
+
+**Balanço da série v0.19–v0.26 (H2 em 1+1D).**
+- O que sobreviveu a todas as checagens de álgebra e de controle:
+  - No vácuo, o gauge age **só gerando massa** (v0.21).
+  - Na dinâmica, o potencial de Gauss de alcance ilimitado gera emaranhamento multipartido acima do que dá uma interação local (v0.22–v0.23) e suprime pares longos (v0.22, v0.24).
+- O que caiu: o fator 1,5 (v0.14), a lei em m/g (v0.15), a frente rápida (v0.19) e a ressonância de ruptura (v0.25–v0.26).
+
 ## Próximos passos
 
 - [x] Conferir os pesos κ e o resultado N₀ + N½ − 4N₁ (verificação espectral independente; coeficiente confere com Visser 2002)
@@ -705,7 +736,7 @@ As álgebras conjuntas são geradas pelas regiões, sem linhas de Wilson entre e
 - [x] H2: controle com interação local (v0.23) — sinal de I₃ não é exclusivo do gauge; magnitude 4–100× maior é; pares longos suprimidos 13–53× além da interação local
 - [x] H2: potencial linear truncado em R (v0.24) — I₃ satura em R ≳ escala do bloco; supressão de pares exige alcance completo (Gauss)
 - [x] H2: lei de escala da supressão de pares (v0.25) — sem colapso em degrau; ressonância: pico de IM em D ≈ R (escala de ruptura impressa na geometria)
-- [ ] H2: ressonância de ruptura no Schwinger de verdade — quench com cargas externas (θ / fluxo de fundo): a IM tem pico na escala de ruptura 2m/σ quando a corda se rompe por criação de pares?
+- [x] H2: ressonância de ruptura no Schwinger real (v0.26) — não existe; a da v0.25 era artefato do corte
 - [ ] H2: isolar o efeito par/ímpar em R (células staggered)
 - [ ] H2: álgebra invariante não abeliana (SU(2), SU(3): decomposição por irreps de cor) para refazer v0.7–v0.8
 - [ ] H2: SU(2)/SU(3) em cadeias longas via DMRG/MPS (escala da localidade com N)
