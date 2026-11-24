@@ -13,9 +13,9 @@ Cada ideia é uma hipótese que precisa sobreviver a testes cada vez mais duros:
 | **T0** Consistência interna | A matemática fecha? | `tests/test_t0_*.py`, `tests/h2/test_h2_t0_*.py` |
 | **T1** Limites conhecidos | Recupera a física estabelecida? | `tests/test_t1_*.py`, `tests/h2/test_h2_t1_*.py` |
 | **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` (H1; validação do código de H2 contra Martinez 2016) |
-| **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (1 tentativa, v0.26, falhou) |
+| **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (2 tentativas, v0.26 e v0.31, ambas falharam) |
 
-**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 2 (H1 + validação Schwinger/Martinez 2016, v0.30), T3 = 1 (falhou). O código de H2 já foi confrontado com dados de laboratório (v0.30); as afirmações específicas de H2 ainda não.
+**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 2 (H1 + validação Schwinger/Martinez 2016, v0.30), T3 = 2 (ambos falharam: v0.26 e v0.31). O código de H2 já foi confrontado com dados de laboratório (v0.30); as afirmações específicas de H2 ainda não.
 
 Convenções nos testes:
 - **teste normal**: resultado que a ideia precisa satisfazer;
@@ -859,6 +859,32 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 - O código de H2 está **validado contra dado real**: a física ideal coincide com a do artigo a 3·10⁻⁴, e o pipeline de erros reproduz o deles exatamente.
 - A falha de P2 é **de protocolo, não de física**: o pré-registro comparou com a evolução ideal, mas o experimento implementa uma versão discretizada e ruidosa. Lição para os próximos T2/T3: pré-registrar **com o protocolo experimental** (passos de Trotter, ruído), não com a idealização.
 - Isso **não** testa as afirmações específicas de H2 (álgebra invariante, I₃), porque nenhum experimento mediu essas grandezas. Mas dá base para o próximo passo: propor a medida de I₃ como predição T3 com protocolo realista.
+
+## T3: a assinatura de I₃ como predição mensurável (v0.31) — não é testável na prática
+
+**Pergunta.** A I₃ na álgebra invariante do gauge foi 4–100× maior que a de um controle com interação local de mesmo gap (v0.23). Ela sobrevive a um **protocolo experimental realista**, a ponto de virar uma predição que um laboratório possa testar? Pela regra da v0.30, o pré-registro usa o protocolo completo.
+
+**Protocolo simulado.**
+- Schwinger digital em **N = 16 qubits**, quench do vácuo nu, gauge (m = 0, J = 1) contra o controle local (V = 1, o mais negativo da v0.23), com massas ajustadas ao **mesmo gap** (1,6024).
+- **Trotter Z · pares · ímpares, dt = 0,25.** É a ordem que reproduz exatamente Martinez 2016; o teste confere isso de novo.
+- **Desfase** p por qubit por passo, por trajetórias (300).
+- Observável: **I₃ de Rényi-2** na álgebra invariante (blocos de 2 sítios no centro).
+- Medida por **sombras clássicas** de um disparo, com Haar local, estimador em lotes e desfasagem por setor no pós-processamento. O estimador foi validado sem viés: −0,2175 ± 0,046 contra −0,2197 exato.
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: evolução exata, \|I₃⁽²⁾_gauge\| ≥ 3 × \|I₃⁽²⁾_controle\| (média t ∈ [3,6]) | **Falhou:** −0,100 contra −0,040 (razão 2,53) |
+| P2: com p = 0,01, Δ = I₃(gauge) − I₃(controle) retém ≥ 50% do valor sem ruído | **Falhou:** 42% (−0,087 → −0,036) |
+| P3: com M = 10⁴ disparos, \|Δ\| ≥ 3σ | **Falhou:** σ ≈ 0,42, \|Δ\|/σ = 0,06. Para 3σ seriam **~1,2·10⁷ disparos por modelo** |
+
+**Observações.**
+- Em Rényi-2 e N = 16 o contraste é menor (2,5×) do que em von Neumann e N = 20 (até 6,5×, v0.23).
+- O erro de Trotter com dt = 0,25 é grande: sem ruído, Δ(t = 4) = −0,087 contra −0,046 exato.
+- O gargalo decisivo é estatístico. I₃ é uma combinação de sete entropias que se cancelam quase todas, e cada uma é estimada com variância que cresce exponencialmente com o tamanho da região.
+
+**Leitura.** A assinatura de I₃ é **real nos modelos, mas pequena demais** para ser medida com a tecnologia atual: ~10⁷ disparos equivalem a semanas ou meses de um experimento de íons, que faz 10⁵–10⁶ medições por dia. Como T3, ela **não passa**. Isso não refuta o resultado da v0.23 (que é sobre o modelo), mas mostra que ele não vira uma predição testável.
+
+**O que fica para H2.** Das assinaturas específicas do gauge, a que tem sinal grande é a **supressão de pares longos sob confinamento** (13–53× contra o controle local, v0.23). Ela, porém, exige regiões grandes (~6 sítios cada), o que é estatisticamente ainda mais caro. Um T3 viável teria de usar observáveis de **região única** (Rényi-2 de um bloco, barato de medir) ou correlações de **carga** (diagonais, medidas diretamente na base computacional), e não informação multipartida.
 
 ## Próximos passos
 
