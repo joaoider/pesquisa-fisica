@@ -10,10 +10,12 @@ Cada ideia é uma hipótese que precisa sobreviver a testes cada vez mais duros:
 
 | Nível | Pergunta | Arquivos |
 |---|---|---|
-| **T0** Consistência interna | A matemática fecha? | `tests/test_t0_*.py` |
-| **T1** Limites conhecidos | Recupera a física estabelecida? | `tests/test_t1_*.py` |
-| **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` |
-| **T3** Predição nova | Diz algo novo e mensurável? | *(a criar)* |
+| **T0** Consistência interna | A matemática fecha? | `tests/test_t0_*.py`, `tests/h2/test_h2_t0_*.py` |
+| **T1** Limites conhecidos | Recupera a física estabelecida? | `tests/test_t1_*.py`, `tests/h2/test_h2_t1_*.py` |
+| **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` (H1); H2: *(nenhum ainda)* |
+| **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (1 tentativa, v0.26, falhou) |
+
+**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 1 (só H1), T3 = 1 (falhou). H2 ainda não teve contato com dados experimentais; o próximo passo é T2 com simuladores quânticos de teorias de gauge.
 
 Convenções nos testes:
 - **teste normal**: resultado que a ideia precisa satisfazer;
@@ -161,7 +163,7 @@ Código geral SU(N_c) (`sun_lattice.py`), com o Casimir de cor pela identidade d
 | **P2.** Cadeia emergente para todo J | **Passou** |
 | **P3.** Confinamento de cor ⇒ mais local | **Passou.** Razão I(vizinhos)/I(distância 3): 53 → 73 → 212 → 2176 |
 
-**N = 8 no GitHub Actions (2 704 156 estados; runner público 4 vCPU / 15 GB; 38 min).** [Execução](https://github.com/joaoider/pesquisa-fisica/actions/runs/44568396438), resultados em `results/su3_n8.json`, conferidos por `tests/h2/test_h2_resultados_pesados.py`.
+**N = 8 no GitHub Actions (2 704 156 estados; runner público 4 vCPU / 15 GB; 38 min).** [Execução](https://github.com/joaoider/pesquisa-fisica/actions/runs/44568396438), resultados em `results/su3_n8.json`, conferidos por `tests/h2/test_h2_t1_resultados_pesados.py`.
 
 | J | Energia | Singleto (S²) | Cadeia | Spearman | I(viz.)/I(d=3) |
 |---|---|---|---|---|---|
@@ -229,7 +231,7 @@ Arquivo: `tests/h2/test_h2_t1_holografia_einstein.py`. A cadeia lógica é: RT (
 
 ## Ponte H1 ↔ H2 (v0.11): S = A/(4G) usa o mesmo G induzido?
 
-Arquivo: `tests/test_ponte_h1_h2.py`. A entropia de emaranhamento de área (método das réplicas, heat kernel no cone) e o G induzido de H1 foram calculados **no mesmo esquema** (corte de tempo próprio).
+Arquivo: `tests/test_t1_ponte_h1_h2.py`. A entropia de emaranhamento de área (método das réplicas, heat kernel no cone) e o G induzido de H1 foram calculados **no mesmo esquema** (corte de tempo próprio).
 
 | Predição | Resultado |
 |---|---|
@@ -803,6 +805,31 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 - O regime de fótons (acoplamento fraco) exige ⟨E²⟩ grande, isto é, N muito maior, o que está fora do alcance da diagonalização exata.
 
 **Próximo passo correto.** Ir direto ao limite de fótons com **Maxwell não compacto na rede**, que é gaussiano e exatamente solúvel em redes grandes. Para ele, Casini e Huerta mostram como calcular a entropia com centro elétrico, e o resultado pode ser comparado com o termo de contato de Kabat (−6 por vetor, v0.12) e com o modo de borda de Donnelly-Wall.
+
+## Levantamento para T2 e checagem de novidade da I₃ (24/11/2026)
+
+**Objetivo.** Encontrar dados experimentais publicados que permitam o primeiro teste T2 de H2, e verificar se a assinatura de I₃ (v0.22–v0.23) é nova o suficiente para ser T3.
+
+**Experimentos com teorias de gauge em simuladores quânticos:**
+
+| Trabalho | Plataforma | Modelo | O que foi medido | Utilidade para T2 |
+|---|---|---|---|---|
+| Martinez et al., *Nature* 534, 516 (2016), arXiv:1605.04570 | íons, 4 qubits, digital | **o nosso Hamiltoniano** (Gauss eliminada, ε₀ = 0, J = w, m = 0,5w), quench do vácuo nu | densidade de partículas ν(t), eco de Loschmidt, negatividade logarítmica entre metades (tomografia) | **Alta para validar a ferramenta**, baixa para H2: dados só em figuras, 4 passos de Trotter, descoerência (p ≈ 0,038/qubit/passo) e vazamento de 14–31% |
+| Kokail et al., *Nature* 569, 355 (2019), arXiv:1810.03421 | íons, até 20 qubits, variacional | Schwinger (estado fundamental) | energias, gaps, variância | Estático, sem entropias de regiões |
+| De et al. (2024), arXiv:2410.13815 | íons, analógico | Z₂ em 1+1D | ruptura de corda resolvida no espaço e no tempo | Modelo diferente (Z₂ com campo misto) |
+| Liu et al. (2024), arXiv:2411.15443 | rede óptica | Schwinger (link quântico) | ruptura de corda, condição de ressonância | Observáveis de carga, não de entropia |
+| Brydges et al., *Science* 364, 260 (2019) | íons, 20 qubits | XY de longo alcance | Rényi-2 por medições aleatórias | Mostra que S⁽²⁾ de regiões é mensurável em ~20 qubits |
+
+**Novidade da I₃.**
+- **Não é nova** a I₃ negativa após quenches: Caceffo & Alba (2023, arXiv:2305.10245) encontram I₃ < 0 em sistemas integráveis com multipletos de quasipartículas, e há também Marić & Fagotti (2022) e Berthiere (2024).
+- **Não é novo** o uso de álgebras com centro para emaranhamento em gauge: Casini-Huerta-Rosabal (2014), Aoki et al. (2015), Ghosh-Soni-Trivedi (2015) e a abordagem relacional de 2025 (arXiv:2506.23459).
+- **Não é nova** a medição experimental de entropias por setor de simetria: há protocolos de medições aleatórias para teorias de gauge (Bringewatt-Kunjummen-Mueller, *Quantum* 2024) e medições de emaranhamento resolvido por simetria.
+- **Pode ser nova a combinação específica:** I₃ na álgebra invariante após o quench do Schwinger, comparada com uma interação local de mesmo gap e com o potencial linear truncado (v0.22–v0.24). Não encontrei esse controle na literatura. É uma novidade **estreita**: uma predição quantitativa num modelo conhecido, não uma física nova.
+
+**Avaliação.**
+1. **T2 viável agora:** reproduzir ν(t) e a negatividade de Martinez et al. (2016) com o nosso código, incluindo o modelo de erro publicado (desfase p por qubit por passo, Trotter de 4 passos). É uma **validação da ferramenta** contra dado real, não um teste de H2 em sentido forte: o próprio artigo já compara com a teoria.
+2. **T2 para H2 propriamente:** não existe ainda. Nenhum experimento publicado mediu IM ou I₃ entre regiões **na álgebra invariante** de uma teoria de gauge.
+3. **Caminho para T3:** formular a assinatura de I₃ como **protocolo mensurável**: Rényi-2, medições aleatórias com respeito à simetria, ~10–20 íons, erros realistas. Depois, verificar se ela sobrevive às imperfeições experimentais. Isso transforma o resultado da v0.23 numa predição que um laboratório pode testar.
 
 ## Próximos passos
 
