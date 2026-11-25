@@ -13,9 +13,9 @@ Cada ideia é uma hipótese que precisa sobreviver a testes cada vez mais duros:
 | **T0** Consistência interna | A matemática fecha? | `tests/test_t0_*.py`, `tests/h2/test_h2_t0_*.py` |
 | **T1** Limites conhecidos | Recupera a física estabelecida? | `tests/test_t1_*.py`, `tests/h2/test_h2_t1_*.py` |
 | **T2** Vínculos experimentais | Sobrevive aos dados? | `tests/test_t2_*.py` (H1; validação do código de H2 contra Martinez 2016) |
-| **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (2 tentativas, v0.26 e v0.31, ambas falharam) |
+| **T3** Predição nova | Diz algo novo e mensurável? | `tests/h2/test_h2_t3_*.py` (3 tentativas: v0.26, v0.31, v0.32 — nenhuma passou integralmente) |
 
-**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 2 (H1 + validação Schwinger/Martinez 2016, v0.30), T3 = 2 (ambos falharam: v0.26 e v0.31). O código de H2 já foi confrontado com dados de laboratório (v0.30); as afirmações específicas de H2 ainda não.
+**Balanço por nível (24/11/2026):** T0 = 7 arquivos, T1 = 30, T2 = 2 (H1 + validação Schwinger/Martinez 2016, v0.30), T3 = 3 (v0.26 e v0.31 falharam; v0.32 falhou em P1, com um candidato exploratório). O código de H2 já foi confrontado com dados de laboratório (v0.30); as afirmações específicas de H2 ainda não.
 
 Convenções nos testes:
 - **teste normal**: resultado que a ideia precisa satisfazer;
@@ -885,6 +885,37 @@ Conferência: o decaimento é monótono **em todos os instantes**, então a méd
 **Leitura.** A assinatura de I₃ é **real nos modelos, mas pequena demais** para ser medida com a tecnologia atual: ~10⁷ disparos equivalem a semanas ou meses de um experimento de íons, que faz 10⁵–10⁶ medições por dia. Como T3, ela **não passa**. Isso não refuta o resultado da v0.23 (que é sobre o modelo), mas mostra que ele não vira uma predição testável.
 
 **O que fica para H2.** Das assinaturas específicas do gauge, a que tem sinal grande é a **supressão de pares longos sob confinamento** (13–53× contra o controle local, v0.23). Ela, porém, exige regiões grandes (~6 sítios cada), o que é estatisticamente ainda mais caro. Um T3 viável teria de usar observáveis de **região única** (Rényi-2 de um bloco, barato de medir) ou correlações de **carga** (diagonais, medidas diretamente na base computacional), e não informação multipartida.
+
+## Triagem de observáveis baratos (v0.32): a lei de Gauss não é única; ν é o candidato
+
+**Pergunta.** A I₃ é cara demais (v0.31). Há algum efeito específico do gauge em **observáveis baratos**, com protocolo realista?
+
+**Método.** N = 16, quench do vácuo nu. O gauge nos casos (m = 0, J = 1) e (m = 0,5, J = 2), contra controles locais H_V com V ∈ {1, 2, 4} e massa ajustada ao mesmo gap. Médias em t ∈ [2,6] de quatro observáveis:
+- ν, a densidade de partículas;
+- ⟨Q_iQ_j⟩_c a distância 6;
+- S₂ de um bloco central de 4 sítios;
+- **F = Var(Q da meia cadeia)**. Pela lei de Gauss, F = Var(E) no elo central.
+
+Protocolo: Trotter com dt = 0,25, desfase p = 0,01 (200 trajetórias) e 10⁴ disparos na base computacional por tempo.
+
+| observável | (0; 1): gauge / V=1 / V=2 / V=4 | (0,5; 2): gauge / V=1 / V=2 / V=4 |
+|---|---|---|
+| F (flutuação de fluxo) | 0,251 / 0,585 / 0,375 / **0,163** | 0,099 / 0,232 / 0,107 / **0,052** |
+| S₂ (bloco de 4) | 1,92 / 1,52 / 1,27 / 0,76 | 0,52 / 0,74 / 0,41 / 0,22 |
+| ⟨Q₅Q₁₁⟩_c | +0,0019 / −0,0015 / +0,0045 / +0,0137 | +0,0011 / +0,0012 / +0,0021 / +0,0006 |
+| **ν** | **0,428** / 0,354 / 0,351 / 0,282 | **0,203** / 0,177 / 0,134 / 0,090 |
+
+| Previsão pré-registrada | Resultado |
+|---|---|
+| P1: F_gauge ≤ 0,5 × min F_controle (penalidade de Gauss) | **Falhou.** A repulsão local forte (V = 4) suprime a flutuação de carga mais que o gauge |
+| P2: S₂ do gauge a ±30% de algum controle (entropia barata não distingue) | **Passou** |
+| P3: separação de F ≥ 3σ com protocolo realista | **Passou** (40σ e 11σ), mas não sustenta assinatura, já que o gauge não é extremo em F |
+
+**Leitura.**
+- A supressão de flutuação de carga pela lei de Gauss é **reproduzida por repulsão local**. Não é uma assinatura do gauge.
+- A entropia de região única também não distingue: o gauge fica dentro da faixa dos controles.
+- **Exploratório: ν é o único observável em que o gauge fica fora da faixa de todos os controles**, nos dois casos (0,428 contra no máximo 0,354; 0,203 contra no máximo 0,177). Com o mesmo gap, o gauge cria mais pares. A interpretação é que o gap do gauge vem do custo do **campo entre as cargas**, que só pesa quando o par se separa; nos controles locais o gap vem sobretudo da **massa**, que pesa já na criação.
+- ν é o observável mais barato possível (diagonal) e já foi medido em laboratório (Martinez 2016). Antes de ser candidato a T3, precisa de um pré-registro próprio com uma família de controles mais ampla.
 
 ## Próximos passos
 
